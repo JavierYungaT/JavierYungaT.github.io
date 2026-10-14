@@ -1,32 +1,45 @@
 ---
+import Icon from './Icon.astro';
 import Section from './Section.astro';
 import { certifications, degree } from '@/data/education';
+import { sections } from '@/data/site';
 ---
 
-<Section id="formacion" title="Formación">
+<Section id="formacion" heading={sections.education} align="left">
   <div class="education">
-    <article class="degree card">
+    <article class="degree" data-reveal>
+      <Icon name="graduation" size={40} class="degree__icon" />
       <p class="degree__period">{degree.period}</p>
       <h3 class="degree__title">{degree.title}</h3>
       <p class="degree__institution">{degree.institution}</p>
-      {degree.note && <p class="degree__note">{degree.note}</p>}
+      {
+        degree.note && (
+          <p class="degree__note">
+            <Icon name="badge" size={18} />
+            {degree.note}
+          </p>
+        )
+      }
     </article>
 
-    <div class="certs card">
+    <div class="certs" data-reveal style="--d: 150ms">
       <h3 class="certs__title">Certificaciones</h3>
-      <ul class="certs__list">
+      <ol class="certs__list">
         {
-          certifications.map((cert) => (
+          certifications.map((cert, index) => (
             <li class="certs__item">
-              <div>
-                <p class="certs__name">{cert.name}</p>
-                <p class="certs__issuer">{cert.issuer}</p>
-              </div>
+              <span class="certs__index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span class="certs__body">
+                <span class="certs__name">{cert.name}</span>
+                <span class="certs__issuer">{cert.issuer}</span>
+              </span>
               <time datetime={cert.isoDate}>{cert.date}</time>
             </li>
           ))
         }
-      </ul>
+      </ol>
     </div>
   </div>
 </Section>
@@ -34,50 +47,67 @@ import { certifications, degree } from '@/data/education';
 <style>
   .education {
     display: grid;
-    gap: 16px;
+    gap: 48px;
   }
 
   .degree {
+    position: relative;
     display: grid;
-    gap: 8px;
+    gap: 10px;
     align-content: start;
-    padding: clamp(22px, 3vw, 32px);
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-contrast);
+    padding: clamp(28px, 4vw, 40px);
+    border-radius: var(--radius);
+    background: var(--gradient-navy);
+    color: #ffffff;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .degree::after {
+    content: '';
+    position: absolute;
+    right: -30%;
+    top: -40%;
+    width: 80%;
+    height: 100%;
+    background: radial-gradient(closest-side, rgba(22, 200, 245, 0.25), transparent);
+    pointer-events: none;
+  }
+
+  .degree :global(.degree__icon) {
+    color: var(--cyan);
+    margin-bottom: 12px;
   }
 
   .degree__period {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    opacity: 0.85;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .degree__title {
-    font-size: clamp(1.375rem, 3vw, 1.75rem);
-    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2rem);
   }
 
   .degree__institution {
+    color: var(--cyan);
     font-weight: 500;
   }
 
   .degree__note {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid color-mix(in srgb, var(--accent-contrast) 30%, transparent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.75);
     font-size: 0.875rem;
-    opacity: 0.9;
-  }
-
-  .certs {
-    padding: clamp(22px, 3vw, 28px);
   }
 
   .certs__title {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: 1.25rem;
+    margin-bottom: 8px;
   }
 
   .certs__list {
@@ -85,20 +115,34 @@ import { certifications, degree } from '@/data/education';
   }
 
   .certs__item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: baseline;
     gap: 16px;
-    padding-block: 12px;
+    padding-block: 15px;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.3s var(--ease-out);
   }
 
-  .certs__item + .certs__item {
-    border-top: 1px solid var(--border);
+  .certs__item:hover {
+    padding-left: 6px;
+  }
+
+  .certs__index {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--blue);
+  }
+
+  .certs__body {
+    display: grid;
+    gap: 2px;
   }
 
   .certs__name {
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   .certs__issuer {
@@ -107,15 +151,21 @@ import { certifications, degree } from '@/data/education';
   }
 
   .certs__item time {
-    flex: none;
     font-size: 0.8125rem;
     color: var(--text-muted);
+    white-space: nowrap;
   }
 
-  @media (min-width: 880px) {
+  @media (min-width: 960px) {
     .education {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      align-items: start;
+      gap: 64px;
+    }
+
+    .degree {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
     }
   }
 </style>

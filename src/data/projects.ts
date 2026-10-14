@@ -21,6 +21,7 @@ const auditPlatformDiagram = [
 export const projects: Project[] = [
   {
     title: 'CRM y auditoría externa multi-firma',
+    icon: 'layers',
     description:
       'Plataforma usada por varias firmas auditoras para gestionar clientes, encargos y documentación. Dashboards con filtros por firma y auditor, y notificaciones en tiempo real por WebSockets con JWT y enrutamiento por grupos.',
     tags: ['Django REST', 'Django Channels', 'Redis', 'Next.js', 'PostgreSQL', 'AWS Lightsail'],
@@ -30,6 +31,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Extractor de datos de la Superintendencia de Compañías',
+    icon: 'scan',
     description:
       'Scraper con Selenium y OCR (Tesseract) que lee los PDF con PyMuPDF e identifica la firma auditora externa de cada compañía.',
     tags: ['Python', 'Selenium', 'Tesseract OCR', 'PyMuPDF', 'PostgreSQL'],
@@ -37,6 +39,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Gestión de carreras por WhatsApp',
+    icon: 'map',
     description:
       'SaaS multi-cooperativa: los pasajeros piden por WhatsApp, los conductores usan una app móvil y el operador asigna desde una central web con mapas.',
     tags: ['NestJS', 'React Native', 'WhatsApp Cloud API', 'Google Maps', 'PostgreSQL'],
@@ -45,6 +48,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Microservicios bancarios',
+    icon: 'bank',
     description:
       'Servicios de clientes y cuentas comunicados por eventos con RabbitMQ, con pruebas y Docker Compose.',
     tags: ['Java 17', 'Spring Boot 3', 'RabbitMQ', 'Docker Compose', 'PostgreSQL'],
@@ -52,6 +56,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Migración de WordPress a Astro',
+    icon: 'globe',
     description:
       'Rediseño del sitio de una firma de auditoría con servicios, tarifario, blog y contacto.',
     tags: ['Astro', 'TypeScript', 'Vercel'],
@@ -59,6 +64,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Asistentes de WhatsApp con IA',
+    icon: 'chat',
     description: 'Chatbots que informan sucursales y agendan citas, automatizados con n8n.',
     tags: ['LLMs', 'n8n', 'MCP', 'WhatsApp'],
     links: { demo: '', repo: '' },

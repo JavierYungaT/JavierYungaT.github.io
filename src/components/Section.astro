@@ -1,21 +1,32 @@
 ---
+import NeuralCanvas from './NeuralCanvas.astro';
+import type { SectionHeading } from '@/types/content';
+
 interface Props {
   id: string;
-  title: string;
-  /** Texto corto en monoespaciada encima del título. */
-  eyebrow?: string;
-  class?: string;
+  heading: SectionHeading;
+  /**
+   * default: fondo del tema.
+   * soft: degradado claro con franjas diagonales.
+   * dark: azul marino (igual en ambos temas).
+   */
+  tone?: 'default' | 'soft' | 'dark';
+  align?: 'center' | 'left';
+  /** Dibuja la red neuronal animada de fondo. */
+  neural?: boolean;
 }
 
-const { id, title, eyebrow, class: className } = Astro.props;
+const { id, heading, tone = 'default', align = 'center', neural = false } = Astro.props;
 const headingId = `${id}-titulo`;
 ---
 
-<section id={id} class:list={['section', className]} aria-labelledby={headingId}>
+<section id={id} class:list={['section', `section--${tone}`]} aria-labelledby={headingId}>
+  {neural && <NeuralCanvas tone={tone === 'dark' ? 'dark' : 'light'} />}
   <div class="container">
-    <header class="section__header">
-      {eyebrow && <p class="section__eyebrow">{eyebrow}</p>}
-      <h2 id={headingId} class="section__title">{title}</h2>
+    <header class:list={['section__header', `section__header--${align}`]} data-reveal>
+      <p class="eyebrow">{heading.eyebrow}</p>
+      <h2 id={headingId} class="section__title">{heading.title}</h2>
+      <span class="divider" aria-hidden="true"></span>
       <slot name="intro" />
     </header>
     <slot />
@@ -24,25 +35,73 @@ const headingId = `${id}-titulo`;
 
 <style>
   .section {
-    padding-block: var(--section-space) 0;
+    position: relative;
+    padding-block: var(--section-space);
+    overflow: hidden;
+  }
+
+  .section--soft {
+    background: var(--bg-soft);
+  }
+
+  /* Franjas diagonales translúcidas, como en el sitio de TekniaSoft. */
+  .section--soft::before,
+  .section--soft::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 52px;
+    background: var(--band);
+    transform: skewX(-12deg);
+    pointer-events: none;
+  }
+
+  .section--soft::before {
+    left: 9%;
+  }
+
+  .section--soft::after {
+    right: 9%;
+  }
+
+  .section--dark {
+    background: var(--gradient-navy);
+    color: #ffffff;
+  }
+
+  .section--dark .eyebrow {
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .section__header {
     display: grid;
-    gap: 12px;
-    margin-bottom: clamp(28px, 5vw, 44px);
-    max-width: 680px;
+    gap: 16px;
+    margin-bottom: clamp(40px, 6vw, 64px);
   }
 
-  .section__eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    color: var(--accent);
-    letter-spacing: 0.02em;
+  .section__header--center {
+    justify-items: center;
+    text-align: center;
+    margin-inline: auto;
+    max-width: 720px;
+  }
+
+  .section__header--left {
+    justify-items: start;
+    max-width: 640px;
   }
 
   .section__title {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 700;
+    font-size: clamp(1.875rem, 4.4vw, 2.75rem);
+  }
+
+  .section__header :global(p:not(.eyebrow)) {
+    color: var(--text-muted);
+    font-size: 1.0625rem;
+  }
+
+  .section--dark .section__header :global(p:not(.eyebrow)) {
+    color: rgba(255, 255, 255, 0.7);
   }
 </style>

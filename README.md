@@ -26,12 +26,14 @@ Todo el texto vive en `src/data/`; no hace falta tocar los componentes.
 
 | Archivo                  | Contenido                                                   |
 | ------------------------ | ----------------------------------------------------------- |
-| `src/data/site.ts`       | Título y descripción SEO, navegación, contacto y redes      |
+| `src/data/site.ts`       | SEO, navegación, títulos de cada sección, contacto y redes  |
 | `src/data/profile.ts`    | Hero, cifras y sección "Sobre mí"                           |
 | `src/data/experience.ts` | Experiencia laboral (`current: true` rellena el nodo)       |
 | `src/data/projects.ts`   | Proyectos; `featured: true` lo muestra a ancho completo     |
 | `src/data/stack.ts`      | Tecnologías por columna con su nivel                        |
 | `src/data/education.ts`  | Título universitario y certificaciones                      |
+
+Los iconos de proyectos, stack y cifras se eligen por nombre (ver `src/lib/icons.ts`).
 
 Los tipos de cada estructura están en `src/types/content.ts`, así que el editor avisa si falta un campo.
 
@@ -39,7 +41,7 @@ Los tipos de cada estructura están en `src/types/content.ts`, así que el edito
 
 **Archivos en `public/`:**
 
-- `public/foto.jpg`: foto del hero (cuadrada, mínimo 600×600). Si no existe, se muestra el monograma "JY".
+- `public/foto.png`: foto de la sección "Sobre mí" y de la vista previa al compartir el enlace (cuadrada, se muestra en círculo). La ruta se cambia en `hero.photo` de `src/data/profile.ts`. Si no existe, se muestra el monograma "JY".
 - `public/cv.pdf`: archivo que descarga el botón "Descargar CV".
 
 ## Desplegar en GitHub Pages
@@ -58,10 +60,11 @@ Configuración única en el repositorio `JavierYungaT.github.io`: **Settings →
 
 ```
 src/
-  components/   Una sección por componente + piezas reutilizables (Section, Button, TagList)
+  components/   Una sección por componente + piezas reutilizables
+                (Section, Button, TagList, Icon, CodeWindow, NeuralCanvas)
   data/         Contenido editable
   layouts/      <head>, SEO, fuentes y tema
-  lib/          Utilidades (hash estilo git de la experiencia)
+  lib/          Iconos (icons.ts) y hash estilo git de la experiencia
   pages/        index.astro ensambla las secciones
   styles/       Tokens de color (claro/oscuro) y estilos base
   types/        Tipos del contenido

@@ -3,6 +3,7 @@ import type { SkillGroup } from '@/types/content';
 export const stack: SkillGroup[] = [
   {
     title: 'Backend',
+    icon: 'server',
     skills: [
       { name: 'Spring Boot', level: 'avanzado' },
       { name: 'Node.js / NestJS', level: 'intermedio' },
@@ -13,6 +14,7 @@ export const stack: SkillGroup[] = [
   },
   {
     title: 'Frontend y móvil',
+    icon: 'mobile',
     skills: [
       { name: 'HTML / CSS', level: 'avanzado' },
       { name: 'Angular', level: 'intermedio' },
@@ -23,6 +25,7 @@ export const stack: SkillGroup[] = [
   },
   {
     title: 'Datos',
+    icon: 'database',
     skills: [
       { name: 'MySQL', level: 'avanzado' },
       { name: 'PostgreSQL', level: 'intermedio' },
@@ -33,6 +36,7 @@ export const stack: SkillGroup[] = [
   },
   {
     title: 'Cloud y DevOps',
+    icon: 'cloud',
     skills: [
       { name: 'UML', level: 'avanzado' },
       { name: 'Docker', level: 'intermedio' },

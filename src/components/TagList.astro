@@ -2,12 +2,14 @@
 interface Props {
   tags: string[];
   label?: string;
+  /** `dark` para tarjetas sobre fondo azul marino. */
+  tone?: 'default' | 'dark';
 }
 
-const { tags, label = 'Tecnologías' } = Astro.props;
+const { tags, label = 'Tecnologías', tone = 'default' } = Astro.props;
 ---
 
-<ul class="tags" aria-label={label}>
+<ul class:list={['tags', `tags--${tone}`]} aria-label={label}>
   {tags.map((tag) => <li class="tag">{tag}</li>)}
 </ul>
 
@@ -16,18 +18,30 @@ const { tags, label = 'Tecnologías' } = Astro.props;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
   }
 
   .tag {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
-    padding: 6px 9px;
-    border-radius: 6px;
-    background: var(--surface-muted);
+    padding: 7px 10px;
+    border-radius: 4px;
     border: 1px solid var(--border);
     color: var(--text-muted);
     white-space: nowrap;
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tags--dark .tag {
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.72);
   }
 </style>

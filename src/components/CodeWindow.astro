@@ -1,0 +1,141 @@
+---
+interface Props {
+  filename: string;
+  /** Activa el efecto de escritura sobre el contenido del slot. */
+  typewriter?: boolean;
+}
+
+const { filename, typewriter = false } = Astro.props;
+---
+
+<div class="code-window">
+  <div class="code-window__bar">
+    <span class="code-window__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="code-window__file">{filename}</span>
+  </div>
+  <pre class="code-window__body"><code data-typewriter={typewriter || undefined}><slot /></code>{typewriter && <span class="code-window__caret" data-caret aria-hidden="true"></span>}</pre>
+</div>
+
+<script>
+  // Escribe el código carácter a carácter respetando el resaltado de sintaxis.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-typewriter]').forEach((code) => {
+    const pre = code.closest('pre');
+    const caret = pre?.querySelector<HTMLElement>('[data-caret]');
+    if (!pre || !caret || reduceMotion) return;
+
+    pre.style.minHeight = `${pre.offsetHeight}px`;
+    const walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
+    const chunks: { node: Text; text: string }[] = [];
+    while (walker.nextNode()) {
+      const node = walker.currentNode as Text;
+      if (node.data) {
+        chunks.push({ node, text: node.data });
+        node.data = '';
+      }
+    }
+
+    code.append(caret);
+    caret.style.animation = 'none';
+    let chunkIndex = 0;
+    let charIndex = 0;
+
+    const typeNext = () => {
+      if (chunkIndex >= chunks.length) {
+        caret.style.animation = '';
+        return;
+      }
+      const { node, text } = chunks[chunkIndex];
+      if (charIndex === 0) node.after(caret);
+      const char = text[charIndex];
+      node.data += char;
+      charIndex++;
+      if (charIndex >= text.length) {
+        chunkIndex++;
+        charIndex = 0;
+      }
+      window.setTimeout(typeNext, char === '\n' ? 220 : 24 + Math.random() * 40);
+    };
+
+    window.setTimeout(typeNext, 900);
+  });
+</script>
+
+<style>
+  .code-window {
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(8, 20, 42, 0.94);
+    box-shadow: 0 40px 80px -30px rgba(10, 108, 240, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .code-window__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .code-window__dots {
+    display: flex;
+    gap: 7px;
+  }
+
+  .code-window__dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .code-window__file {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .code-window__body {
+    margin: 0;
+    padding: 22px 22px 26px;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    color: #e6edf7;
+  }
+
+  .code-window__caret {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    background: var(--cyan);
+    animation: blink 1s steps(1) infinite;
+  }
+
+  /* Colores de sintaxis para el contenido del slot. */
+  .code-window__body :global(.k) {
+    color: #4cc9ff;
+  }
+
+  .code-window__body :global(.s) {
+    color: #5ee0b5;
+  }
+
+  .code-window__body :global(.f) {
+    color: #8fb4ff;
+  }
+
+  .code-window__body :global(.c) {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .code-window__body :global(.n) {
+    color: #ffb86b;
+  }
+</style>

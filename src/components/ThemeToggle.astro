@@ -1,16 +1,10 @@
 ---
+import Icon from './Icon.astro';
 ---
 
 <button class="theme-toggle" type="button" aria-label="Cambiar tema de color" title="Cambiar tema">
-  <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
-  </svg>
-  <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="4"></circle>
-    <path
-      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-    ></path>
-  </svg>
+  <Icon name="moon" size={18} class="theme-toggle__moon" />
+  <Icon name="sun" size={18} class="theme-toggle__sun" />
 </button>
 
 <script>
@@ -55,51 +49,43 @@
   .theme-toggle {
     display: inline-grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     flex: none;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+    color: #ffffff;
     cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease;
   }
 
   .theme-toggle:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .theme-toggle__icon {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
   }
 
   /* En claro se ofrece la luna; en oscuro, el sol. */
-  .theme-toggle__icon--sun {
+  .theme-toggle :global(.theme-toggle__sun) {
     display: none;
   }
 
-  :global(:root[data-theme='dark']) .theme-toggle__icon--sun {
+  :global(:root[data-theme='dark']) .theme-toggle :global(.theme-toggle__sun) {
     display: block;
   }
 
-  :global(:root[data-theme='dark']) .theme-toggle__icon--moon {
+  :global(:root[data-theme='dark']) .theme-toggle :global(.theme-toggle__moon) {
     display: none;
   }
 
   @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme='light'])) .theme-toggle__icon--sun {
+    :global(:root:not([data-theme='light'])) .theme-toggle :global(.theme-toggle__sun) {
       display: block;
     }
 
-    :global(:root:not([data-theme='light'])) .theme-toggle__icon--moon {
+    :global(:root:not([data-theme='light'])) .theme-toggle :global(.theme-toggle__moon) {
       display: none;
     }
   }

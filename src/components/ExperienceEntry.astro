@@ -5,15 +5,17 @@ import type { Experience } from '@/types/content';
 
 interface Props {
   entry: Experience;
+  /** Retraso de la animación de aparición en ms. */
+  delay?: number;
 }
 
-const { entry } = Astro.props;
+const { entry, delay = 0 } = Astro.props;
 const hash = commitHash(`${entry.company}:${entry.role}`);
 ---
 
-<li class:list={['commit', { 'commit--current': entry.current }]}>
-  <span class="commit__node" aria-hidden="true"></span>
-  <article class="commit__body">
+<li class:list={['commit', { 'commit--current': entry.current }]} data-reveal style={`--d: ${delay}ms`}>
+  <span class="commit__node" aria-hidden="true"><i></i></span>
+  <article class="commit__card card card--hover-bar">
     <p class="commit__meta">
       <code class="commit__hash" aria-hidden="true">{hash}</code>
       {entry.ref && <span class="commit__ref">{entry.ref}</span>}
@@ -33,10 +35,9 @@ const hash = commitHash(`${entry.company}:${entry.role}`);
 
 <style>
   .commit {
-    --node-size: 16px;
     position: relative;
-    padding-left: 36px;
-    padding-bottom: 40px;
+    padding-left: 44px;
+    padding-bottom: 24px;
   }
 
   .commit:last-child {
@@ -46,29 +47,39 @@ const hash = commitHash(`${entry.company}:${entry.role}`);
   .commit__node {
     position: absolute;
     left: 0;
-    top: 4px;
-    width: var(--node-size);
-    height: var(--node-size);
+    top: 26px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    border: 2px solid var(--accent);
-    background: var(--bg);
+    border: 2px solid var(--blue);
+    background: var(--surface);
   }
 
   .commit--current .commit__node {
-    background: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-soft);
+    border-color: transparent;
+    background: var(--gradient);
+    box-shadow: 0 0 0 5px rgba(22, 200, 245, 0.18);
   }
 
-  .commit__body {
+  .commit--current .commit__node i {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .commit__card {
     display: grid;
-    gap: 10px;
+    gap: 12px;
+    padding: clamp(20px, 3vw, 28px);
   }
 
   .commit__meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 10px;
+    gap: 8px 12px;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     line-height: 1.4;
@@ -76,40 +87,63 @@ const hash = commitHash(`${entry.company}:${entry.role}`);
   }
 
   .commit__hash {
-    color: var(--accent);
+    color: var(--blue);
+    font-weight: 500;
   }
 
   .commit__ref {
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 999px;
-    border: 1px solid var(--accent);
-    color: var(--accent);
+    background: var(--gradient);
+    color: #ffffff;
     font-size: 0.75rem;
   }
 
   .commit__title {
     font-size: clamp(1.1875rem, 2.4vw, 1.375rem);
-    font-weight: 600;
   }
 
   .commit__company {
+    color: var(--blue);
     font-weight: 500;
-    color: var(--text-muted);
   }
 
   .commit__highlights {
+    list-style: none;
     display: grid;
-    gap: 6px;
-    padding-left: 18px;
+    gap: 8px;
     color: var(--text-muted);
-    max-width: 72ch;
   }
 
-  .commit__highlights li::marker {
-    color: var(--border);
+  .commit__highlights li {
+    position: relative;
+    padding-left: 20px;
   }
 
-  .commit__body :global(.tags) {
-    margin-top: 4px;
+  .commit__highlights li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.72em;
+    width: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient);
+  }
+
+  .commit__card :global(.tags) {
+    margin-top: 6px;
+  }
+
+  :global(:root[data-theme='dark']) .commit__company,
+  :global(:root[data-theme='dark']) .commit__hash {
+    color: var(--accent);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .commit__company,
+    :global(:root:not([data-theme='light'])) .commit__hash {
+      color: var(--accent);
+    }
   }
 </style>

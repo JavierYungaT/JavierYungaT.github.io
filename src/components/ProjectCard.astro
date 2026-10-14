@@ -1,4 +1,6 @@
 ---
+import CodeWindow from './CodeWindow.astro';
+import Icon from './Icon.astro';
 import TagList from './TagList.astro';
 import type { Project } from '@/types/content';
 
@@ -11,10 +13,15 @@ const { demo, repo } = project.links ?? {};
 const hasLinks = Boolean(demo || repo);
 ---
 
-<article class:list={['project card', { 'project--featured': project.featured }]}>
+<article class:list={['project card card--hover-bar', { 'project--featured': project.featured }]}>
+  <Icon name={project.icon} size={150} class="project__watermark" />
+
   <div class="project__content">
-    {project.featured && <p class="project__label">Proyecto destacado</p>}
-    {project.status && <p class="project__status">{project.status}</p>}
+    <div class="project__top">
+      <span class="project__icon"><Icon name={project.icon} size={26} /></span>
+      {project.featured && <span class="project__badge">Proyecto destacado</span>}
+      {project.status && <span class="project__badge project__badge--soft">{project.status}</span>}
+    </div>
     <h3 class="project__title">{project.title}</h3>
     <p class="project__description">{project.description}</p>
     <TagList tags={project.tags} label={`Tecnologías de ${project.title}`} />
@@ -23,12 +30,12 @@ const hasLinks = Boolean(demo || repo);
         <p class="project__links">
           {demo && (
             <a href={demo} target="_blank" rel="noopener noreferrer">
-              Ver demo<span aria-hidden="true"> ↗</span>
+              Ver demo <Icon name="arrowUpRight" size={16} />
             </a>
           )}
           {repo && (
             <a href={repo} target="_blank" rel="noopener noreferrer">
-              Repositorio<span aria-hidden="true"> ↗</span>
+              Repositorio <Icon name="arrowUpRight" size={16} />
             </a>
           )}
         </p>
@@ -39,7 +46,9 @@ const hasLinks = Boolean(demo || repo);
   {
     project.diagram && (
       <figure class="project__diagram">
-        <pre tabindex="0" aria-label={`Diagrama de arquitectura de ${project.title}`}>{project.diagram}</pre>
+        <div role="img" aria-label={`Diagrama de arquitectura de ${project.title}`} tabindex="0">
+          <CodeWindow filename="arquitectura.txt">{project.diagram}</CodeWindow>
+        </div>
         <figcaption>Arquitectura simplificada</figcaption>
       </figure>
     )
@@ -49,39 +58,88 @@ const hasLinks = Boolean(demo || repo);
 <style>
   .project {
     display: grid;
-    gap: 24px;
-    padding: clamp(20px, 3vw, 28px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding: clamp(24px, 3.4vw, 36px);
     min-width: 0;
+    height: 100%;
+  }
+
+  .project :global(.project__watermark) {
+    position: absolute;
+    right: -24px;
+    bottom: -24px;
+    color: var(--text);
+    opacity: 0.04;
+    stroke-width: 1;
+    pointer-events: none;
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s var(--ease-out);
+  }
+
+  .project:hover :global(.project__watermark) {
+    opacity: 0.08;
+    transform: rotate(-6deg) scale(1.05);
   }
 
   .project__content {
+    position: relative;
     display: grid;
-    gap: 12px;
+    gap: 14px;
     align-content: start;
     min-width: 0;
   }
 
-  .project__label,
-  .project__status {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--accent);
+  .project__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
   }
 
-  .project__status {
-    justify-self: start;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: var(--accent-soft);
+  .project__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background: var(--surface-muted);
+    color: var(--blue);
+    transition:
+      background 0.4s ease,
+      color 0.4s ease;
+  }
+
+  .project:hover .project__icon {
+    background: var(--gradient);
+    color: #ffffff;
+  }
+
+  .project__badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--gradient);
+    color: #ffffff;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .project__badge--soft {
+    background: transparent;
+    border: 1px solid var(--blue);
+    color: var(--blue);
   }
 
   .project__title {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.375rem;
   }
 
   .project--featured .project__title {
-    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    font-size: clamp(1.5rem, 3vw, 2rem);
   }
 
   .project__description {
@@ -91,28 +149,38 @@ const hasLinks = Boolean(demo || repo);
   .project__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
+    margin-top: 4px;
+  }
+
+  .project__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
     font-weight: 600;
-    font-size: 0.9375rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .project__links a:hover {
+    color: var(--blue);
   }
 
   .project__diagram {
+    position: relative;
     margin: 0;
     min-width: 0;
     display: grid;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
   }
 
-  .project__diagram pre {
-    margin: 0;
-    padding: 20px;
-    overflow-x: auto;
-    border-radius: var(--radius-sm);
-    background: var(--surface-muted);
-    border: 1px solid var(--border);
-    color: var(--text);
+  .project__diagram :global(.code-window__body) {
     font-size: 0.75rem;
-    line-height: 1.45;
+    line-height: 1.25;
   }
 
   .project__diagram figcaption {
@@ -121,11 +189,11 @@ const hasLinks = Boolean(demo || repo);
     color: var(--text-muted);
   }
 
-  @media (min-width: 1040px) {
+  @media (min-width: 1024px) {
     .project--featured {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
       align-items: center;
-      gap: 40px;
+      gap: 48px;
     }
   }
 </style>

@@ -1,19 +1,33 @@
 ---
+import Icon from './Icon.astro';
 import Section from './Section.astro';
+import { sections } from '@/data/site';
 import { stack } from '@/data/stack';
 ---
 
-<Section id="stack" title="Stack">
-  <div class="stack">
+<Section id="stack" heading={sections.stack} tone="dark" neural>
+  <div class="stack" data-reveal>
     {
       stack.map((group) => (
-        <section class="stack__group card" aria-label={group.title}>
-          <h3 class="stack__title">{group.title}</h3>
+        <section class="stack__group" aria-labelledby={`stack-${group.icon}`}>
+          <span class="stack__icon">
+            <Icon name={group.icon} size={30} />
+          </span>
+          <h3 id={`stack-${group.icon}`} class="stack__title">
+            {group.title}
+          </h3>
           <ul class="stack__list">
             {group.skills.map((skill) => (
               <li class="stack__item">
                 <span>{skill.name}</span>
-                <span class:list={['stack__level', `stack__level--${skill.level}`]}>{skill.level}</span>
+                <span class:list={['stack__level', `stack__level--${skill.level}`]}>
+                  <span class="stack__meter" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <span class="sr-only">{skill.level}</span>
+                </span>
               </li>
             ))}
           </ul>
@@ -21,24 +35,59 @@ import { stack } from '@/data/stack';
       ))
     }
   </div>
+  <p class="stack__legend" aria-hidden="true">
+    <span class="stack__level stack__level--avanzado"><span class="stack__meter"><i></i><i></i><i></i></span> avanzado</span>
+    <span class="stack__level stack__level--intermedio"><span class="stack__meter"><i></i><i></i><i></i></span> intermedio</span>
+  </p>
 </Section>
 
 <style>
+  /* Tarjetas unidas, separadas por líneas finas. */
   .stack {
     display: grid;
-    gap: 16px;
+    gap: 1px;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--border);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.6);
   }
 
   .stack__group {
-    padding: 22px;
+    position: relative;
+    padding: clamp(24px, 3vw, 32px);
+    background: var(--surface);
+    color: var(--text);
+    transition: background 0.4s ease;
+  }
+
+  .stack__group::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: var(--gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .stack__group:hover::before {
+    transform: scaleX(1);
+  }
+
+  .stack__icon {
+    display: inline-flex;
+    color: var(--blue);
+    transition: color 0.4s ease;
+  }
+
+  .stack__group:hover .stack__icon {
+    color: var(--cyan);
   }
 
   .stack__title {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    padding-bottom: 14px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid var(--border);
+    margin: 18px 0 14px;
+    font-size: 1.25rem;
   }
 
   .stack__list {
@@ -48,26 +97,59 @@ import { stack } from '@/data/stack';
   .stack__item {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     gap: 12px;
-    padding-block: 9px;
+    padding-block: 11px;
     font-size: 0.9375rem;
-  }
-
-  .stack__item + .stack__item {
-    border-top: 1px dashed var(--border);
+    border-top: 1px solid var(--border);
   }
 
   .stack__level {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     flex: none;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     color: var(--text-muted);
   }
 
-  .stack__level--avanzado {
-    color: var(--accent);
-    font-weight: 500;
+  .stack__meter {
+    display: inline-flex;
+    gap: 3px;
+  }
+
+  .stack__meter i {
+    width: 10px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border-strong);
+  }
+
+  .stack__level--intermedio .stack__meter i:nth-child(-n + 2),
+  .stack__level--avanzado .stack__meter i {
+    background: var(--gradient);
+  }
+
+  .stack__legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 28px;
+    margin-top: 28px;
+  }
+
+  .stack__legend .stack__level {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .stack__legend .stack__meter i:not(:nth-child(-n + 2)) {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .stack__legend .stack__level--avanzado .stack__meter i {
+    background: var(--gradient);
   }
 
   @media (min-width: 600px) {

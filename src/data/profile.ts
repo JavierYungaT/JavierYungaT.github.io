@@ -1,20 +1,23 @@
-import type { Stat } from '@/types/content';
+import type { Chip, Stat } from '@/types/content';
 
 export const hero = {
   availability: 'Disponible para roles de Desarrollador Senior',
-  title: 'Construyo software que las empresas usan todos los días.',
+  /** El título se muestra como `titleHighlight` (con degradado) + `titleRest`. */
+  titleHighlight: 'Construyo software',
+  titleRest: 'que las empresas usan todos los días.',
   subtitle:
     'Soy Javier Yunga, Ingeniero en Ciencias de la Computación. Diseño y desarrollo sistemas web, móviles y backend: desde facturación electrónica con el SRI hasta plataformas de auditoría en tiempo real.',
   /** Ruta dentro de public/. Si el archivo no existe se muestra el monograma. */
-  photo: '/foto.jpg',
+  photo: '/foto.png',
   monogram: 'JY',
+  role: 'Desarrollador de Software',
   cv: '/cv.pdf',
 };
 
 export const stats: Stat[] = [
-  { value: '4+', label: 'años desarrollando' },
-  { value: '6', label: 'empresas y equipos' },
-  { value: '3', label: 'plataformas', detail: 'web, móvil, cloud' },
+  { icon: 'clock', value: 4, suffix: '+', label: 'años desarrollando' },
+  { icon: 'building', value: 6, label: 'empresas y equipos' },
+  { icon: 'devices', value: 3, label: 'plataformas', detail: 'web, móvil, cloud' },
 ];
 
 export const about = {
@@ -22,5 +25,16 @@ export const about = {
     'Más de 4 años en equipos multidisciplinarios, del backend al despliegue. Experiencia en retail, cooperativas financieras, firmas de auditoría y startups, lo que me permite entender los procesos contables, tributarios y de control que el software debe respetar.',
     'Actualmente Ingeniero en Sistemas en Aliado Contable y fundador de TekniaSoft (desarrollo web, apps móviles, integraciones con WhatsApp e IA, facturación electrónica y sistemas a medida). También realizo auditorías informáticas de controles TI.',
   ],
-  principles: ['Arquitectura limpia', 'Principios SOLID', 'Patrones de diseño', 'CI/CD', 'Scrum'],
+  principles: [
+    { label: 'Arquitectura limpia', icon: 'layers' },
+    { label: 'Principios SOLID', icon: 'shield' },
+    { label: 'Patrones de diseño', icon: 'cube' },
+    { label: 'CI/CD', icon: 'refresh' },
+    { label: 'Scrum', icon: 'users' },
+  ] satisfies Chip[],
+  /** Tarjetas flotantes junto a la foto. */
+  highlights: [
+    { label: 'Ingeniero en Sistemas', detail: 'Aliado Contable' },
+    { label: 'Fundador', detail: 'TekniaSoft' },
+  ],
 };

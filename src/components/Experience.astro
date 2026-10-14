@@ -2,28 +2,45 @@
 import ExperienceEntry from './ExperienceEntry.astro';
 import Section from './Section.astro';
 import { experience } from '@/data/experience';
+import { sections } from '@/data/site';
 ---
 
-<Section id="experiencia" title="Experiencia" eyebrow={'$ git log --author="Javier Yunga"'}>
+<Section id="experiencia" heading={sections.experience} tone="soft" neural>
+  <p slot="intro" class="git-command"><span>$</span> git log --graph --author="Javier Yunga"</p>
   <ol class="git-log" aria-label="Historial laboral, del más reciente al más antiguo">
-    {experience.map((entry) => <ExperienceEntry entry={entry} />)}
+    {experience.map((entry, index) => <ExperienceEntry entry={entry} delay={index * 60} />)}
   </ol>
 </Section>
 
 <style>
+  .git-command {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem !important;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .git-command span {
+    color: var(--blue);
+  }
+
   .git-log {
     position: relative;
     list-style: none;
+    max-width: 880px;
+    margin-inline: auto;
   }
 
-  /* Línea vertical que une los nodos (centrada en el nodo de 16px). */
+  /* Rama principal: línea vertical con degradado que une los nodos. */
   .git-log::before {
     content: '';
     position: absolute;
-    left: 7px;
-    top: 12px;
-    bottom: 12px;
+    left: 9px;
+    top: 14px;
+    bottom: 14px;
     width: 2px;
-    background: var(--border);
+    background: linear-gradient(to bottom, var(--cyan), var(--blue) 40%, var(--border-strong));
   }
 </style>

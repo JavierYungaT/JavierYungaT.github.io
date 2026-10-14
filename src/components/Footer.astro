@@ -1,12 +1,57 @@
 ---
-import { site } from '@/data/site';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { contact, navigation, site, socialLinks } from '@/data/site';
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="container footer__inner">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Logo />
+      <p>{site.tagline}</p>
+    </div>
+
+    <nav class="footer__col" aria-label="Secciones">
+      <p class="footer__heading">Navegación</p>
+      <ul>
+        {
+          navigation.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <p class="footer__heading">Contacto</p>
+      <ul>
+        <li>
+          <a href={`mailto:${contact.email}`}>
+            <Icon name="mail" size={18} />
+            {contact.email}
+          </a>
+        </li>
+        {
+          socialLinks.map((link) => (
+            <li>
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                <Icon name="arrowUpRight" size={18} />
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
     <p>© <span data-current-year>{year}</span> {site.name}</p>
+    <a href="#inicio">Volver arriba ↑</a>
   </div>
 </footer>
 
@@ -19,13 +64,84 @@ const year = new Date().getFullYear();
 
 <style>
   .footer {
-    border-top: 1px solid var(--border);
+    background: var(--navy-950);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9375rem;
   }
 
-  .footer__inner {
+  .footer__grid {
+    display: grid;
+    gap: 40px;
+    padding-block: 64px 48px;
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    max-width: 360px;
+  }
+
+  .footer__heading {
+    margin-bottom: 14px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .footer__col ul {
+    list-style: none;
+  }
+
+  .footer__col li {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer__col a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 0.3s ease;
+  }
+
+  .footer__col a :global(.icon) {
+    color: var(--cyan);
+  }
+
+  .footer__col a:hover {
+    color: var(--cyan);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
     padding-block: 24px;
-    font-family: var(--font-mono);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.8125rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .footer__bottom a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .footer__bottom a:hover {
+    color: var(--cyan);
+  }
+
+  @media (min-width: 760px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1.2fr;
+      gap: 56px;
+    }
   }
 </style>

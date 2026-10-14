@@ -2,14 +2,15 @@
 import ProjectCard from './ProjectCard.astro';
 import Section from './Section.astro';
 import { projects, projectsNote } from '@/data/projects';
+import { sections } from '@/data/site';
 ---
 
-<Section id="proyectos" title="Proyectos">
-  <p slot="intro" class="projects__note">{projectsNote}</p>
+<Section id="proyectos" heading={sections.projects}>
+  <p slot="intro">{projectsNote}</p>
   <ul class="projects">
     {
-      projects.map((project) => (
-        <li class:list={{ 'projects__item--wide': project.featured }}>
+      projects.map((project, index) => (
+        <li class:list={{ 'projects__item--wide': project.featured }} data-reveal style={`--d: ${(index % 2) * 120}ms`}>
           <ProjectCard project={project} />
         </li>
       ))
@@ -18,28 +19,24 @@ import { projects, projectsNote } from '@/data/projects';
 </Section>
 
 <style>
-  .projects__note {
-    color: var(--text-muted);
-  }
-
   .projects {
     list-style: none;
     display: grid;
-    gap: 16px;
+    gap: 20px;
   }
 
   .projects > li {
-    display: grid;
     min-width: 0;
   }
 
   @media (min-width: 760px) {
     .projects {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
+      gap: 24px;
     }
 
-    .projects__item--wide {
+    .projects__item--wide,
+    .projects > li:last-child:nth-child(even) {
       grid-column: 1 / -1;
     }
   }

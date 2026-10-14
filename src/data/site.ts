@@ -1,11 +1,13 @@
-import type { ExternalLink, NavLink } from '@/types/content';
+import type { ExternalLink, NavLink, SectionHeading } from '@/types/content';
 
 export const site = {
   name: 'Javier Yunga',
-  logo: 'javier.yunga',
+  /** El logo se muestra como "javier" + ".yunga" resaltado. */
+  logo: { first: 'javier', second: '.yunga', mark: 'JY' },
   title: 'Javier Yunga · Desarrollador de Software',
   description:
     'Ingeniero en Ciencias de la Computación. Diseño y desarrollo sistemas web, móviles y backend: facturación electrónica con el SRI, plataformas de auditoría en tiempo real e integraciones con IA.',
+  tagline: 'Ingeniero en Ciencias de la Computación. Sistemas web, móviles y backend que las empresas usan todos los días.',
   locale: 'es_EC',
   lang: 'es',
 };
@@ -17,9 +19,18 @@ export const navigation: NavLink[] = [
   { label: 'Contacto', href: '#contacto' },
 ];
 
+/** Etiqueta pequeña y título de cada sección. */
+export const sections = {
+  about: { eyebrow: 'Sobre mí', title: 'Del backend al despliegue, entendiendo el negocio' },
+  experience: { eyebrow: 'Experiencia', title: 'Mi carrera, commit a commit' },
+  projects: { eyebrow: 'Proyectos', title: 'Lo que he construido' },
+  stack: { eyebrow: 'Stack', title: 'Tecnologías con las que trabajo' },
+  education: { eyebrow: 'Formación', title: 'Formación y certificaciones' },
+  contact: { eyebrow: 'Contacto', title: '¿Tienes un proyecto o una vacante?' },
+} satisfies Record<string, SectionHeading>;
+
 export const contact = {
   email: 'javieryunga4@gmail.com',
-  title: '¿Tienes un proyecto o una vacante?',
   text: 'Busco roles de Desarrollador Senior, remotos o híbridos. Respondo en menos de 24 horas.',
 };
 

@@ -1,5 +1,9 @@
 /** Tipos compartidos por los archivos de src/data y los componentes que los muestran. */
 
+import type { IconName } from '@/lib/icons';
+
+export type { IconName };
+
 export interface NavLink {
   label: string;
   href: string;
@@ -10,8 +14,22 @@ export interface ExternalLink {
   href: string;
 }
 
+export interface SectionHeading {
+  eyebrow: string;
+  title: string;
+}
+
+export interface Chip {
+  label: string;
+  icon: IconName;
+}
+
 export interface Stat {
-  value: string;
+  icon: IconName;
+  /** Número que se anima al aparecer. */
+  value: number;
+  /** Texto pegado al número, p. ej. "+". */
+  suffix?: string;
   label: string;
   detail?: string;
 }
@@ -38,6 +56,7 @@ export interface ProjectLinks {
 
 export interface Project {
   title: string;
+  icon: IconName;
   description: string;
   tags: string[];
   /** Proyecto a ancho completo con diagrama. */
@@ -58,6 +77,7 @@ export interface Skill {
 
 export interface SkillGroup {
   title: string;
+  icon: IconName;
   skills: Skill[];
 }
 
