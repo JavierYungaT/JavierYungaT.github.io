@@ -5,7 +5,7 @@ import { sections } from '@/data/site';
 import { stack } from '@/data/stack';
 ---
 
-<Section id="stack" heading={sections.stack} tone="dark" neural>
+<Section id="stack" heading={sections.stack} tone="dark" fx="code">
   <div class="stack" data-reveal>
     {
       stack.map((group) => (
@@ -77,12 +77,12 @@ import { stack } from '@/data/stack';
 
   .stack__icon {
     display: inline-flex;
-    color: var(--blue);
+    color: var(--accent);
     transition: color 0.4s ease;
   }
 
   .stack__group:hover .stack__icon {
-    color: var(--cyan);
+    color: var(--brand-light);
   }
 
   .stack__title {

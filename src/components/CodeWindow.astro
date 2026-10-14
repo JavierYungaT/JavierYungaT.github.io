@@ -58,7 +58,13 @@ const { filename, typewriter = false } = Astro.props;
       window.setTimeout(typeNext, char === '\n' ? 220 : 24 + Math.random() * 40);
     };
 
-    window.setTimeout(typeNext, 900);
+    // Empieza a escribir cuando la ventana entra en pantalla.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      window.setTimeout(typeNext, 500);
+    }, { threshold: 0.4 });
+    observer.observe(pre);
   });
 </script>
 
@@ -67,8 +73,8 @@ const { filename, typewriter = false } = Astro.props;
     overflow: hidden;
     border-radius: var(--radius);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(8, 20, 42, 0.94);
-    box-shadow: 0 40px 80px -30px rgba(10, 108, 240, 0.35);
+    background: rgba(7, 22, 17, 0.94);
+    box-shadow: 0 40px 80px -30px rgba(16, 185, 129, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -105,7 +111,7 @@ const { filename, typewriter = false } = Astro.props;
     overflow-x: auto;
     font-size: 0.8125rem;
     line-height: 1.75;
-    color: #e6edf7;
+    color: #e6f2ec;
   }
 
   .code-window__caret {
@@ -114,21 +120,21 @@ const { filename, typewriter = false } = Astro.props;
     height: 1.1em;
     margin-left: 1px;
     vertical-align: text-bottom;
-    background: var(--cyan);
+    background: var(--brand-light);
     animation: blink 1s steps(1) infinite;
   }
 
   /* Colores de sintaxis para el contenido del slot. */
   .code-window__body :global(.k) {
-    color: #4cc9ff;
+    color: #6ee7b7;
   }
 
   .code-window__body :global(.s) {
-    color: #5ee0b5;
+    color: #f5d58a;
   }
 
   .code-window__body :global(.f) {
-    color: #8fb4ff;
+    color: #a7f3d0;
   }
 
   .code-window__body :global(.c) {
@@ -136,6 +142,6 @@ const { filename, typewriter = false } = Astro.props;
   }
 
   .code-window__body :global(.n) {
-    color: #ffb86b;
+    color: #fca5a5;
   }
 </style>

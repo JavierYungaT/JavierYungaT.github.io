@@ -1,14 +1,24 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import Button from './Button.astro';
+import CodeWindow from './CodeWindow.astro';
 import Icon from './Icon.astro';
 import Section from './Section.astro';
-import { about, hero } from '@/data/profile';
-import { sections, site } from '@/data/site';
+import { about } from '@/data/profile';
+import { sections } from '@/data/site';
 
-// Se resuelve en el build: si la foto no existe en public/, se muestra el monograma.
-const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
+// Código decorativo que se escribe solo (k: palabra clave, s: texto, f: función, n: valor, c: comentario).
+const codeSample = [
+  `<span class="k">import</span> { Ingeniero } <span class="k">from</span> <span class="s">'javier-yunga'</span>;`,
+  ``,
+  `<span class="k">const</span> javier = <span class="k">new</span> <span class="f">Ingeniero</span>({`,
+  `  experiencia: <span class="s">'4+ años'</span>,`,
+  `  enfoque: [<span class="s">'web'</span>, <span class="s">'móvil'</span>, <span class="s">'backend'</span>],`,
+  `  stack: [<span class="s">'Spring Boot'</span>, <span class="s">'NestJS'</span>, <span class="s">'Django'</span>],`,
+  `  disponible: <span class="n">true</span>,`,
+  `});`,
+  ``,
+  `javier.<span class="f">construir</span>(); <span class="c">// software que se usa a diario</span>`,
+].join('\n');
 ---
 
 <Section id="sobre-mi" heading={sections.about} align="left">
@@ -30,19 +40,9 @@ const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
       <Button href="#contacto" variant="outline" icon="arrowRight">Hablemos</Button>
     </div>
 
-    <div class="about__visual" data-reveal style="--d: 150ms">
-      <div class="about__portrait">
-        {
-          hasPhoto ? (
-            <span class="about__photo">
-              <img src={hero.photo} alt={`Foto de ${site.name}`} width="500" height="500" loading="lazy" />
-            </span>
-          ) : (
-            <span class="about__monogram" aria-hidden="true">
-              {hero.monogram}
-            </span>
-          )
-        }
+    <div class="about__visual" aria-hidden="true" data-reveal style="--d: 150ms">
+      <div class="about__float">
+        <CodeWindow filename="javier.ts" typewriter><Fragment set:html={codeSample} /></CodeWindow>
       </div>
       <ul class="about__highlights">
         {
@@ -98,73 +98,24 @@ const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
   }
 
   .about__chips li:hover {
-    border-color: var(--blue);
+    border-color: var(--accent);
     transform: translateY(-2px);
   }
 
   .about__chips :global(.icon) {
-    color: var(--blue);
+    color: var(--accent);
   }
 
   .about__visual {
     position: relative;
-    max-width: 420px;
+    max-width: 520px;
     width: 100%;
     justify-self: center;
-    padding: 0 12px 28px;
+    padding: 34px 0 40px;
   }
 
-  .about__portrait {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    border-radius: 14px;
-    background: var(--gradient-navy);
-    box-shadow: var(--shadow);
-  }
-
-  .about__portrait::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-  }
-
-  /* Foto circular con anillo de degradado, centrada sobre la tarjeta azul marino. */
-  .about__photo {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: grid;
-    place-items: center;
-  }
-
-  .about__photo img {
-    width: 78%;
-    aspect-ratio: 1;
-    padding: 5px;
-    border-radius: 50%;
-    background: var(--gradient);
-    object-fit: cover;
-    box-shadow: 0 30px 60px -20px rgba(10, 108, 240, 0.6);
-  }
-
-  .about__monogram {
-    display: grid;
-    place-items: center;
-    height: 100%;
-    font-family: var(--font-display);
-    font-size: clamp(6rem, 22vw, 9rem);
-    font-weight: 700;
-    letter-spacing: -0.05em;
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  .about__float {
+    animation: float 7s ease-in-out infinite;
   }
 
   .about__highlights {
@@ -193,8 +144,8 @@ const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
   }
 
   .about__highlights li:first-child {
-    top: 32px;
-    left: 0;
+    top: 0;
+    right: 8px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text);
@@ -203,7 +154,7 @@ const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
 
   .about__highlights li:last-child {
     bottom: 0;
-    right: 0;
+    left: 8px;
     background: var(--gradient);
     color: #ffffff;
     box-shadow: var(--shadow-glow);
@@ -218,11 +169,11 @@ const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
     }
 
     .about__highlights li:first-child {
-      left: -36px;
+      right: -20px;
     }
 
     .about__highlights li:last-child {
-      right: -24px;
+      left: -28px;
     }
   }
 </style>

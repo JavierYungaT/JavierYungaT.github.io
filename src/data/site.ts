@@ -31,6 +31,8 @@ export const sections = {
 
 export const contact = {
   email: 'javieryunga4@gmail.com',
+  /** WhatsApp con código de Ecuador (+593), sin el 0 inicial en el enlace. */
+  whatsapp: { label: '+593 95 948 4373', href: 'https://wa.me/593959484373' },
   text: 'Busco roles de Desarrollador Senior, remotos o híbridos. Respondo en menos de 24 horas.',
 };
 

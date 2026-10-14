@@ -2,32 +2,36 @@
    Tokens
    ------------------------------------------------------------------ */
 :root {
-  /* Marca (iguales en claro y oscuro) */
-  --cyan: #16c8f5;
-  --blue: #0a6cf0;
-  --blue-deep: #0a2fa8;
-  --navy-950: #050d1f;
-  --navy-900: #0b1a33;
-  --navy-800: #11264a;
-  --success: #12b886;
-  --gradient: linear-gradient(135deg, var(--cyan), var(--blue) 55%, var(--blue-deep));
-  --gradient-text: linear-gradient(100deg, #34d3ff 0%, #2d8bff 70%, #5a7dff 100%);
-  --gradient-navy: linear-gradient(135deg, #050d1f 0%, #0a1a3d 55%, #0f2b68 100%);
+  /* Marca: paleta Esmeralda (igual en claro y oscuro) */
+  --brand-light: #6ee7b7;
+  --brand: #10b981;
+  --brand-deep: #047857;
+  --ink-950: #06120e;
+  --ink-900: #0b1f19;
+  --ink-800: #123a2e;
+  --success: #34d399;
+  /* Botones y badges: tramo oscuro del verde para que el texto blanco se lea bien. */
+  --gradient: linear-gradient(135deg, #059669, var(--brand-deep) 55%, #065f46);
+  --gradient-text: linear-gradient(100deg, #8ff0c6 0%, #34d399 70%, var(--brand) 100%);
+  --gradient-ink: linear-gradient(135deg, var(--ink-950) 0%, var(--ink-900) 55%, var(--ink-800) 100%);
 
   /* Superficies que cambian con el tema */
   --bg: #ffffff;
-  --bg-soft: linear-gradient(135deg, #f8faff 0%, #eaf1fc 100%);
-  --band: rgba(10, 108, 240, 0.06);
+  --bg-soft: linear-gradient(135deg, #f3faf6 0%, #e1f3ea 100%);
+  --band: rgba(4, 120, 87, 0.06);
   --surface: #ffffff;
-  --surface-muted: #f3f6fb;
-  --text: #0b1a33;
-  --text-muted: #5a6882;
-  --border: #e2e8f2;
-  --border-strong: #c9d3e3;
-  --accent: var(--blue);
-  --shadow-sm: 0 1px 2px rgba(11, 26, 51, 0.05);
-  --shadow: 0 24px 48px -24px rgba(11, 26, 51, 0.18);
-  --shadow-glow: 0 18px 40px -16px rgba(10, 108, 240, 0.55);
+  --surface-muted: #f1f7f4;
+  --text: #0e1f19;
+  --text-muted: #5b6b65;
+  --border: #dde8e3;
+  --border-strong: #c4d4cc;
+  --accent: var(--brand-deep);
+  --shadow-sm: 0 1px 2px rgba(14, 31, 25, 0.05);
+  --shadow: 0 24px 48px -24px rgba(14, 31, 25, 0.2);
+  --shadow-glow: 0 18px 40px -16px rgba(16, 185, 129, 0.55);
+  /* Color de los fondos animados (lluvia de código y pulsos). */
+  --fx-rgb: 4, 120, 87;
+  --fx-alpha: 0.55;
 
   --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -53,35 +57,39 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #050d1f;
-    --bg-soft: linear-gradient(135deg, #07122a 0%, #0b1a33 100%);
-    --band: rgba(22, 200, 245, 0.04);
-    --surface: #0b1a33;
-    --surface-muted: #10223f;
-    --text: #e8eef8;
-    --text-muted: #97a5bf;
+    --bg: #06120e;
+    --bg-soft: linear-gradient(135deg, #081812 0%, #0b1f19 100%);
+    --band: rgba(110, 231, 183, 0.04);
+    --surface: #0b1f19;
+    --surface-muted: #102a22;
+    --text: #e6f2ec;
+    --text-muted: #93a89f;
     --border: rgba(255, 255, 255, 0.09);
     --border-strong: rgba(255, 255, 255, 0.2);
-    --accent: #3fa2ff;
+    --accent: #34d399;
     --shadow-sm: none;
     --shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+    --fx-rgb: 110, 231, 183;
+    --fx-alpha: 0.7;
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #050d1f;
-  --bg-soft: linear-gradient(135deg, #07122a 0%, #0b1a33 100%);
-  --band: rgba(22, 200, 245, 0.04);
-  --surface: #0b1a33;
-  --surface-muted: #10223f;
-  --text: #e8eef8;
-  --text-muted: #97a5bf;
+  --bg: #06120e;
+  --bg-soft: linear-gradient(135deg, #081812 0%, #0b1f19 100%);
+  --band: rgba(110, 231, 183, 0.04);
+  --surface: #0b1f19;
+  --surface-muted: #102a22;
+  --text: #e6f2ec;
+  --text-muted: #93a89f;
   --border: rgba(255, 255, 255, 0.09);
   --border-strong: rgba(255, 255, 255, 0.2);
-  --accent: #3fa2ff;
+  --accent: #34d399;
   --shadow-sm: none;
   --shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  --fx-rgb: 110, 231, 183;
+  --fx-alpha: 0.7;
   color-scheme: dark;
 }
 
@@ -151,13 +159,13 @@ time {
 }
 
 :focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 2px solid var(--brand);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: var(--blue);
+  background: var(--brand-deep);
   color: #ffffff;
 }
 
@@ -262,7 +270,7 @@ time {
   top: -100px;
   z-index: 100;
   padding: 10px 16px;
-  background: var(--blue);
+  background: var(--brand-deep);
   color: #ffffff;
   border-radius: var(--radius-sm);
   font-weight: 600;

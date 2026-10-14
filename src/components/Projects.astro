@@ -1,22 +1,67 @@
 ---
+import Icon from './Icon.astro';
 import ProjectCard from './ProjectCard.astro';
 import Section from './Section.astro';
-import { projects, projectsNote } from '@/data/projects';
+import { projects, projectsNote, projectsPreviewCount } from '@/data/projects';
 import { sections } from '@/data/site';
+
+const hiddenCount = Math.max(projects.length - projectsPreviewCount, 0);
 ---
 
 <Section id="proyectos" heading={sections.projects}>
   <p slot="intro">{projectsNote}</p>
-  <ul class="projects">
+  <ul class="projects" id="lista-proyectos" data-collapsed={hiddenCount > 0 || undefined}>
     {
       projects.map((project, index) => (
-        <li class:list={{ 'projects__item--wide': project.featured }} data-reveal style={`--d: ${(index % 2) * 120}ms`}>
+        <li
+          class:list={{
+            'projects__item--wide': project.featured,
+            'projects__item--extra': index >= projectsPreviewCount,
+          }}
+          data-reveal
+          style={`--d: ${(index % 2) * 120}ms`}
+        >
           <ProjectCard project={project} />
         </li>
       ))
     }
   </ul>
+
+  {
+    hiddenCount > 0 && (
+      <div class="projects__more">
+        <button
+          class="projects__toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="lista-proyectos"
+          data-more={`Ver más proyectos (${hiddenCount})`}
+          data-less="Ver menos proyectos"
+        >
+          <span>Ver más proyectos ({hiddenCount})</span>
+          <Icon name="arrowRight" size={18} class="projects__toggle-icon" />
+        </button>
+      </div>
+    )
+  }
 </Section>
+
+<script>
+  // Sin JS se ven todos los proyectos; con JS se muestran los primeros y el botón despliega el resto.
+  const list = document.getElementById('lista-proyectos');
+  const toggle = document.querySelector<HTMLButtonElement>('.projects__toggle');
+
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    list?.toggleAttribute('data-collapsed', expanded);
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    const label = toggle.querySelector('span');
+    if (label) label.textContent = (expanded ? toggle.dataset.more : toggle.dataset.less) ?? '';
+
+    // Al contraer, vuelve al inicio de la lista para no quedar en un hueco de la página.
+    if (expanded) list?.scrollIntoView({ block: 'start' });
+  });
+</script>
 
 <style>
   .projects {
@@ -29,14 +74,63 @@ import { sections } from '@/data/site';
     min-width: 0;
   }
 
+  :global(.js) .projects[data-collapsed] .projects__item--extra {
+    display: none;
+  }
+
+  .projects__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .projects__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--text);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .projects__toggle:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .projects__toggle :global(.projects__toggle-icon) {
+    transform: rotate(90deg);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .projects__toggle[aria-expanded='true'] :global(.projects__toggle-icon) {
+    transform: rotate(-90deg);
+  }
+
+  /* Sin JS el botón no hace nada, así que se oculta. */
+  :global(html:not(.js)) .projects__more {
+    display: none;
+  }
+
   @media (min-width: 760px) {
     .projects {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 24px;
     }
 
-    .projects__item--wide,
-    .projects > li:last-child:nth-child(even) {
+    .projects__item--wide {
       grid-column: 1 / -1;
     }
   }

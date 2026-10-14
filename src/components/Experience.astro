@@ -5,7 +5,7 @@ import { experience } from '@/data/experience';
 import { sections } from '@/data/site';
 ---
 
-<Section id="experiencia" heading={sections.experience} tone="soft" neural>
+<Section id="experiencia" heading={sections.experience} tone="soft" fx="pulses">
   <p slot="intro" class="git-command"><span>$</span> git log --graph --author="Javier Yunga"</p>
   <ol class="git-log" aria-label="Historial laboral, del más reciente al más antiguo">
     {experience.map((entry, index) => <ExperienceEntry entry={entry} delay={index * 60} />)}
@@ -23,7 +23,7 @@ import { sections } from '@/data/site';
   }
 
   .git-command span {
-    color: var(--blue);
+    color: var(--accent);
   }
 
   .git-log {
@@ -41,6 +41,6 @@ import { sections } from '@/data/site';
     top: 14px;
     bottom: 14px;
     width: 2px;
-    background: linear-gradient(to bottom, var(--cyan), var(--blue) 40%, var(--border-strong));
+    background: linear-gradient(to bottom, var(--brand-light), var(--accent) 40%, var(--border-strong));
   }
 </style>

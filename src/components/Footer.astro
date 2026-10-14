@@ -35,6 +35,12 @@ const year = new Date().getFullYear();
             {contact.email}
           </a>
         </li>
+        <li>
+          <a href={contact.whatsapp.href} target="_blank" rel="noopener noreferrer">
+            <Icon name="whatsapp" size={18} />
+            WhatsApp {contact.whatsapp.label}
+          </a>
+        </li>
         {
           socialLinks.map((link) => (
             <li>
@@ -64,7 +70,7 @@ const year = new Date().getFullYear();
 
 <style>
   .footer {
-    background: var(--navy-950);
+    background: var(--ink-950);
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9375rem;
   }
@@ -111,11 +117,11 @@ const year = new Date().getFullYear();
   }
 
   .footer__col a :global(.icon) {
-    color: var(--cyan);
+    color: var(--brand-light);
   }
 
   .footer__col a:hover {
-    color: var(--cyan);
+    color: var(--brand-light);
   }
 
   .footer__bottom {
@@ -135,7 +141,7 @@ const year = new Date().getFullYear();
   }
 
   .footer__bottom a:hover {
-    color: var(--cyan);
+    color: var(--brand-light);
   }
 
   @media (min-width: 760px) {

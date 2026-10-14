@@ -1,5 +1,5 @@
 ---
-import NeuralCanvas from './NeuralCanvas.astro';
+import BackgroundFx, { type FxEffect } from './BackgroundFx.astro';
 import type { SectionHeading } from '@/types/content';
 
 interface Props {
@@ -12,16 +12,16 @@ interface Props {
    */
   tone?: 'default' | 'soft' | 'dark';
   align?: 'center' | 'left';
-  /** Dibuja la red neuronal animada de fondo. */
-  neural?: boolean;
+  /** Fondo animado de la sección (opcional). */
+  fx?: FxEffect;
 }
 
-const { id, heading, tone = 'default', align = 'center', neural = false } = Astro.props;
+const { id, heading, tone = 'default', align = 'center', fx } = Astro.props;
 const headingId = `${id}-titulo`;
 ---
 
 <section id={id} class:list={['section', `section--${tone}`]} aria-labelledby={headingId}>
-  {neural && <NeuralCanvas tone={tone === 'dark' ? 'dark' : 'light'} />}
+  {fx && <BackgroundFx effect={fx} />}
   <div class="container">
     <header class:list={['section__header', `section__header--${align}`]} data-reveal>
       <p class="eyebrow">{heading.eyebrow}</p>
@@ -44,7 +44,7 @@ const headingId = `${id}-titulo`;
     background: var(--bg-soft);
   }
 
-  /* Franjas diagonales translúcidas, como en el sitio de TekniaSoft. */
+  /* Franjas diagonales translúcidas de fondo. */
   .section--soft::before,
   .section--soft::after {
     content: '';
@@ -66,7 +66,9 @@ const headingId = `${id}-titulo`;
   }
 
   .section--dark {
-    background: var(--gradient-navy);
+    --fx-rgb: 110, 231, 183;
+    --fx-alpha: 1;
+    background: var(--gradient-ink);
     color: #ffffff;
   }
 

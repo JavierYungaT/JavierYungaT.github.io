@@ -16,17 +16,6 @@ export const experience: Experience[] = [
     tags: ['Python', 'Django REST', 'TypeScript', 'React', 'PostgreSQL', 'AWS', 'Docker'],
   },
   {
-    role: 'Fundador y desarrollador',
-    company: 'TekniaSoft',
-    period: 'En paralelo — presente',
-    current: true,
-    ref: 'tekniasoft',
-    highlights: [
-      'Desarrollo web, landing pages, e-commerce, apps Android/iOS, integraciones con WhatsApp e IA, facturación electrónica y sistemas a medida.',
-    ],
-    tags: ['NestJS', 'React Native', 'Astro', 'n8n', 'Vercel'],
-  },
-  {
     role: 'Desarrollador Full Stack',
     company: 'La Motora',
     period: 'may 2024 — nov 2025',

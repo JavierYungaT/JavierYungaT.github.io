@@ -17,6 +17,9 @@ const auditPlatformDiagram = [
   '                             └─────────────────┘',
 ].join('\n');
 
+/** Cuántos proyectos se ven antes de pulsar "Ver más proyectos" (incluye el destacado). */
+export const projectsPreviewCount = 5;
+
 /** El primer proyecto con `featured: true` se muestra a ancho completo. */
 export const projects: Project[] = [
   {
@@ -30,6 +33,30 @@ export const projects: Project[] = [
     links: { demo: '', repo: '' },
   },
   {
+    title: 'Facturación electrónica integrada con el SRI',
+    icon: 'receipt',
+    description:
+      'Conexión con el SRI para emitir facturas electrónicas y notas de crédito y débito desde el sistema empresarial. Consultas 40% más rápidas con indexación y paginación avanzada, y procesamiento de grandes volúmenes de datos fiscales con Hibernate y procedimientos almacenados.',
+    tags: ['Spring Boot', 'Hibernate', 'API SRI', 'SQL Server', 'Angular'],
+    links: { demo: '', repo: '' },
+  },
+  {
+    title: 'Reservas de espacios deportivos',
+    icon: 'calendar',
+    description:
+      'Apps publicadas en Google Play y App Store con notificaciones push. Validación de reservas 30% más rápida gracias a mejoras en la lógica de disponibilidad y los bloqueos concurrentes.',
+    tags: ['Node.js', 'TypeScript', 'Flutter', 'PostgreSQL', 'Docker', 'AWS'],
+    links: { demo: '', repo: '' },
+  },
+  {
+    title: 'Gestión documental con reportes PDF',
+    icon: 'folder',
+    description:
+      'Reportes dinámicos y archivos PDF personalizados dentro del sistema de gestión documental, con dashboards internos en tiempo real y APIs REST para documentos y sincronización de datos.',
+    tags: ['Python', 'TypeScript', 'React', 'PDFKit', 'Docker', 'GitHub Actions'],
+    links: { demo: '', repo: '' },
+  },
+  {
     title: 'Extractor de datos de la Superintendencia de Compañías',
     icon: 'scan',
     description:
@@ -38,12 +65,20 @@ export const projects: Project[] = [
     links: { demo: '', repo: '' },
   },
   {
+    title: 'Módulos financieros, inventario y conciliaciones',
+    icon: 'chart',
+    description:
+      'Módulos financieros, de stock e inventario, con conciliaciones bancarias y reportes contables en JasperReports y Oracle Forms & Reports.',
+    tags: ['Spring Boot', 'Laravel', 'Angular', 'JasperReports', 'Oracle Forms'],
+    links: { demo: '', repo: '' },
+  },
+  {
     title: 'Gestión de carreras por WhatsApp',
     icon: 'map',
     description:
       'SaaS multi-cooperativa: los pasajeros piden por WhatsApp, los conductores usan una app móvil y el operador asigna desde una central web con mapas.',
     tags: ['NestJS', 'React Native', 'WhatsApp Cloud API', 'Google Maps', 'PostgreSQL'],
-    status: 'Producto TekniaSoft · en desarrollo',
+    status: 'En desarrollo',
     links: { demo: '', repo: '' },
   },
   {
@@ -52,6 +87,14 @@ export const projects: Project[] = [
     description:
       'Servicios de clientes y cuentas comunicados por eventos con RabbitMQ, con pruebas y Docker Compose.',
     tags: ['Java 17', 'Spring Boot 3', 'RabbitMQ', 'Docker Compose', 'PostgreSQL'],
+    links: { demo: '', repo: '' },
+  },
+  {
+    title: 'Cobranzas y contratos laborales',
+    icon: 'document',
+    description:
+      'Digitalización completa del proceso de cobranza de deudas, con registro y seguimiento de pagos, y un generador de contratos laborales que aumentó 50% la productividad de RRHH. Carga del sistema 35% más rápida.',
+    tags: ['PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
     links: { demo: '', repo: '' },
   },
   {

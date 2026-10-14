@@ -5,11 +5,12 @@ import Section from './Section.astro';
 import { contact, sections, socialLinks } from '@/data/site';
 ---
 
-<Section id="contacto" heading={sections.contact} tone="soft" neural>
+<Section id="contacto" heading={sections.contact} tone="soft" fx="pulses">
   <p slot="intro">{contact.text}</p>
   <div class="contact card" data-reveal>
     <div class="contact__actions">
       <Button href={`mailto:${contact.email}`} icon="mail">Escríbeme</Button>
+      <Button href={contact.whatsapp.href} variant="outline" icon="whatsapp" external>WhatsApp</Button>
       {
         socialLinks.map((link) => (
           <Button href={link.href} variant="outline" icon="arrowUpRight" external>
@@ -18,10 +19,16 @@ import { contact, sections, socialLinks } from '@/data/site';
         ))
       }
     </div>
-    <p class="contact__email">
-      <Icon name="mail" size={16} />
-      <a href={`mailto:${contact.email}`}>{contact.email}</a>
-    </p>
+    <div class="contact__details">
+      <p class="contact__email">
+        <Icon name="mail" size={16} />
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+      <p class="contact__email">
+        <Icon name="whatsapp" size={16} />
+        <a href={contact.whatsapp.href} target="_blank" rel="noopener noreferrer">{contact.whatsapp.label}</a>
+      </p>
+    </div>
   </div>
 </Section>
 
@@ -43,6 +50,13 @@ import { contact, sections, socialLinks } from '@/data/site';
     gap: 14px;
   }
 
+  .contact__details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 28px;
+  }
+
   .contact__email {
     display: inline-flex;
     align-items: center;
@@ -59,6 +73,6 @@ import { contact, sections, socialLinks } from '@/data/site';
   }
 
   .contact__email a:hover {
-    color: var(--blue);
+    color: var(--accent);
   }
 </style>

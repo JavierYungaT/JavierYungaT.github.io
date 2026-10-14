@@ -16,14 +16,14 @@ export const hero = {
 
 export const stats: Stat[] = [
   { icon: 'clock', value: 4, suffix: '+', label: 'años desarrollando' },
-  { icon: 'building', value: 6, label: 'empresas y equipos' },
+  { icon: 'building', value: 5, label: 'empresas y equipos' },
   { icon: 'devices', value: 3, label: 'plataformas', detail: 'web, móvil, cloud' },
 ];
 
 export const about = {
   paragraphs: [
     'Más de 4 años en equipos multidisciplinarios, del backend al despliegue. Experiencia en retail, cooperativas financieras, firmas de auditoría y startups, lo que me permite entender los procesos contables, tributarios y de control que el software debe respetar.',
-    'Actualmente Ingeniero en Sistemas en Aliado Contable y fundador de TekniaSoft (desarrollo web, apps móviles, integraciones con WhatsApp e IA, facturación electrónica y sistemas a medida). También realizo auditorías informáticas de controles TI.',
+    'Actualmente soy Ingeniero en Sistemas en Aliado Contable, donde desarrollo plataformas de auditoría y gestión documental. También realizo auditorías informáticas de controles TI.',
   ],
   principles: [
     { label: 'Arquitectura limpia', icon: 'layers' },
@@ -35,6 +35,6 @@ export const about = {
   /** Tarjetas flotantes junto a la foto. */
   highlights: [
     { label: 'Ingeniero en Sistemas', detail: 'Aliado Contable' },
-    { label: 'Fundador', detail: 'TekniaSoft' },
+    { label: 'Facturación electrónica', detail: 'Integración SRI' },
   ],
 };
