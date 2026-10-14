@@ -32,16 +32,21 @@ Todo el texto vive en `src/data/`; no hace falta tocar los componentes.
 | `src/data/projects.ts`   | Proyectos; `featured: true` lo muestra a ancho completo     |
 | `src/data/stack.ts`      | Tecnologías por columna con su nivel                        |
 | `src/data/education.ts`  | Título universitario y certificaciones                      |
+| `src/data/practices.ts`  | Sección "Cómo construyo software": pestañas con código      |
 
 Los iconos de proyectos, stack y cifras se eligen por nombre (ver `src/lib/icons.ts`).
 
 Los tipos de cada estructura están en `src/types/content.ts`, así que el editor avisa si falta un campo.
 
+**Casos de estudio:** cada caso es un archivo Markdown en `src/content/casos/` (por ejemplo `facturacion-sri.md`) y se publica en `/proyectos/<nombre-del-archivo>`. Para enlazarlo desde una tarjeta, pon `caseStudy: '<nombre-del-archivo>'` en el proyecto de `src/data/projects.ts`. Los bloques de código del Markdown se resaltan con los colores del sitio.
+
+**Vista previa al compartir:** `public/og.png` (1200×630) se genera a partir de `scripts/og-image.html`. Si cambias tu rol o tu foto, edita ese HTML, ábrelo en Chrome con la ventana a 1200×630 y reemplaza `public/og.png` con una captura.
+
 **Enlaces de proyectos:** cada proyecto tiene `links: { demo: '', repo: '' }`. Al poner una URL aparece el enlace en la tarjeta; si se deja vacío, no se muestra.
 
 **Archivos en `public/`:**
 
-- `public/foto.png`: foto de la sección "Sobre mí" y de la vista previa al compartir el enlace (cuadrada, se muestra en círculo). La ruta se cambia en `hero.photo` de `src/data/profile.ts`. Si no existe, se muestra el monograma "JY".
+- `public/foto.png`: foto de la tarjeta de perfil del hero (cuadrada, se muestra en círculo). La ruta se cambia en `hero.photo` de `src/data/profile.ts`. Si no existe, se muestra el monograma "JY".
 - `public/cv.pdf`: archivo que descarga el botón "Descargar CV".
 
 ## Desplegar en GitHub Pages

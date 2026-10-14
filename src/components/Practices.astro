@@ -1,0 +1,256 @@
+---
+import { Code } from 'astro:components';
+import CodeWindow from './CodeWindow.astro';
+import Icon from './Icon.astro';
+import Section from './Section.astro';
+import codeTheme from '@/lib/esmeralda-code-theme.json';
+import { practices, practicesNote } from '@/data/practices';
+import { sections } from '@/data/site';
+import type { ThemeRegistration } from 'shiki';
+---
+
+<Section id="practicas" heading={sections.practices} tone="dark">
+  <p slot="intro">{practicesNote}</p>
+
+  <div class="practices" data-reveal>
+    <div class="practices__tabs" role="tablist" aria-label="Prácticas">
+      {
+        practices.map((practice, index) => (
+          <button
+            class="practices__tab"
+            type="button"
+            role="tab"
+            id={`tab-${practice.id}`}
+            aria-controls={`panel-${practice.id}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            tabindex={index === 0 ? 0 : -1}
+          >
+            <Icon name={practice.icon} size={18} />
+            {practice.label}
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      practices.map((practice, index) => (
+        <div
+          class="practices__panel"
+          role="tabpanel"
+          id={`panel-${practice.id}`}
+          aria-labelledby={`tab-${practice.id}`}
+          data-initial-hidden={index > 0 || undefined}
+        >
+          <div class="practices__text">
+            <h3 class="practices__title">{practice.title}</h3>
+            <p class="practices__why">{practice.why}</p>
+            <div class="practices__meta">
+              <p class="practices__label">Dónde lo apliqué</p>
+              <ul class="practices__applied">
+                {practice.appliedIn.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+            <ul class="practices__principles" aria-label="Principios">
+              {practice.principles.map((principle) => <li>{principle}</li>)}
+            </ul>
+          </div>
+          <div class="practices__code">
+            <CodeWindow filename={practice.filename} bare>
+              <Code code={practice.code} lang={practice.lang} theme={codeTheme as ThemeRegistration} />
+            </CodeWindow>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<script>
+  // Pestañas accesibles (patrón WAI-ARIA): clic, flechas, Inicio y Fin.
+  // Sin JS se ven todos los paneles uno debajo de otro.
+  const tablist = document.querySelector<HTMLElement>('.practices__tabs');
+  const tabs = Array.from(tablist?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []);
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls') ?? ''));
+
+  function select(index: number, focus = true): void {
+    tabs.forEach((tab, i) => {
+      const selected = i === index;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      if (panels[i]) panels[i]!.hidden = !selected;
+    });
+    if (focus) tabs[index]?.focus();
+    tabs[index]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => select(index, false));
+    tab.addEventListener('keydown', (event) => {
+      const last = tabs.length - 1;
+      const keys: Record<string, number> = {
+        ArrowRight: index === last ? 0 : index + 1,
+        ArrowLeft: index === 0 ? last : index - 1,
+        Home: 0,
+        End: last,
+      };
+      if (event.key in keys) {
+        event.preventDefault();
+        select(keys[event.key]);
+      }
+    });
+  });
+
+  panels.forEach((panel) => {
+    if (!panel?.hasAttribute('data-initial-hidden')) return;
+    panel.hidden = true;
+    panel.removeAttribute('data-initial-hidden');
+  });
+</script>
+
+<style>
+  .practices {
+    display: grid;
+    gap: 28px;
+  }
+
+  .practices__tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  :global(html:not(.js)) .practices__tabs {
+    display: none;
+  }
+
+  .practices__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.75);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .practices__tab:hover {
+    border-color: rgba(110, 231, 183, 0.5);
+    color: #ffffff;
+  }
+
+  .practices__tab[aria-selected='true'] {
+    background: var(--gradient);
+    border-color: transparent;
+    color: #ffffff;
+  }
+
+  .practices__panel {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .practices__panel[hidden],
+  :global(.js) .practices__panel[data-initial-hidden] {
+    display: none;
+  }
+
+  :global(html:not(.js)) .practices__panel + .practices__panel {
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .practices__text {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+  }
+
+  .practices__title {
+    font-size: clamp(1.375rem, 3vw, 1.875rem);
+  }
+
+  .practices__why {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 1.0625rem;
+  }
+
+  .practices__label {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .practices__applied {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+
+  .practices__applied li {
+    position: relative;
+    padding-left: 20px;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .practices__applied li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.72em;
+    width: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--brand-light);
+  }
+
+  .practices__principles {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .practices__principles li {
+    padding: 6px 11px;
+    border-radius: 4px;
+    border: 1px solid rgba(110, 231, 183, 0.3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--brand-light);
+  }
+
+  .practices__code {
+    min-width: 0;
+  }
+
+  @media (min-width: 760px) {
+    .practices__tabs {
+      flex-wrap: wrap;
+      overflow: visible;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .practices__panel {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 48px;
+    }
+  }
+</style>

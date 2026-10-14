@@ -3,9 +3,11 @@ interface Props {
   filename: string;
   /** Activa el efecto de escritura sobre el contenido del slot. */
   typewriter?: boolean;
+  /** El slot ya trae su propio <pre> (p. ej. el componente <Code />). */
+  bare?: boolean;
 }
 
-const { filename, typewriter = false } = Astro.props;
+const { filename, typewriter = false, bare = false } = Astro.props;
 ---
 
 <div class="code-window">
@@ -13,7 +15,15 @@ const { filename, typewriter = false } = Astro.props;
     <span class="code-window__dots" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="code-window__file">{filename}</span>
   </div>
-  <pre class="code-window__body"><code data-typewriter={typewriter || undefined}><slot /></code>{typewriter && <span class="code-window__caret" data-caret aria-hidden="true"></span>}</pre>
+  {
+    bare ? (
+      <div class="code-window__bare">
+        <slot />
+      </div>
+    ) : (
+      <pre class="code-window__body"><code data-typewriter={typewriter || undefined}><slot /></code>{typewriter && <span class="code-window__caret" data-caret aria-hidden="true" />}</pre>
+    )
+  }
 </div>
 
 <script>
@@ -112,6 +122,15 @@ const { filename, typewriter = false } = Astro.props;
     font-size: 0.8125rem;
     line-height: 1.75;
     color: #e6f2ec;
+  }
+
+  .code-window__bare :global(pre) {
+    margin: 0;
+    padding: 22px 22px 26px;
+    overflow-x: auto;
+    background: transparent !important;
+    font-size: 0.8125rem;
+    line-height: 1.7;
   }
 
   .code-window__caret {

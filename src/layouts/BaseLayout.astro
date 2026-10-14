@@ -5,13 +5,13 @@ import { site } from '@/data/site';
 interface Props {
   title?: string;
   description?: string;
-  /** Ruta absoluta (dentro de public/) de la imagen para Open Graph. */
+  /** Ruta (dentro de public/) de la imagen de vista previa al compartir, 1200×630. */
   image?: string;
 }
 
-const { title = site.title, description = site.description, image } = Astro.props;
+const { title = site.title, description = site.description, image = site.ogImage } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const imageUrl = image ? new URL(image, Astro.site).href : undefined;
+const imageUrl = new URL(image, Astro.site).href;
 
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700&display=swap';
@@ -35,8 +35,12 @@ const fontsHref =
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
-    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 

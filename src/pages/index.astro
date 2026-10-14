@@ -6,17 +6,18 @@ import Experience from '@/components/Experience.astro';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 import Hero from '@/components/Hero.astro';
+import Practices from '@/components/Practices.astro';
 import Projects from '@/components/Projects.astro';
 import Stack from '@/components/Stack.astro';
-import { hero } from '@/data/profile';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
-<BaseLayout image={hero.photo}>
+<BaseLayout>
   <Header />
   <main id="contenido">
     <Hero />
     <About />
+    <Practices />
     <Experience />
     <Projects />
     <Stack />

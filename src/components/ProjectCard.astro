@@ -10,7 +10,7 @@ interface Props {
 
 const { project } = Astro.props;
 const { demo, repo } = project.links ?? {};
-const hasLinks = Boolean(demo || repo);
+const hasLinks = Boolean(demo || repo || project.caseStudy);
 ---
 
 <article class:list={['project card card--hover-bar', { 'project--featured': project.featured }]}>
@@ -28,6 +28,11 @@ const hasLinks = Boolean(demo || repo);
     {
       hasLinks && (
         <p class="project__links">
+          {project.caseStudy && (
+            <a href={`/proyectos/${project.caseStudy}`} class="project__case">
+              Ver caso de estudio <Icon name="arrowRight" size={16} />
+            </a>
+          )}
           {demo && (
             <a href={demo} target="_blank" rel="noopener noreferrer">
               Ver demo <Icon name="arrowUpRight" size={16} />
@@ -166,6 +171,10 @@ const hasLinks = Boolean(demo || repo);
   }
 
   .project__links a:hover {
+    color: var(--accent);
+  }
+
+  .project__links .project__case {
     color: var(--accent);
   }
 

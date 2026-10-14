@@ -19,11 +19,6 @@ export interface SectionHeading {
   title: string;
 }
 
-export interface Chip {
-  label: string;
-  icon: IconName;
-}
-
 export interface Stat {
   icon: IconName;
   /** Número que se anima al aparecer. */
@@ -63,6 +58,8 @@ export interface Project {
   featured?: boolean;
   /** Etiqueta corta de estado, p. ej. "En desarrollo". */
   status?: string;
+  /** Slug del caso de estudio en src/content/casos/ (opcional). */
+  caseStudy?: string;
   /** Diagrama de arquitectura en texto monoespaciado. */
   diagram?: string;
   links?: ProjectLinks;
@@ -95,4 +92,21 @@ export interface Certification {
   date: string;
   /** Fecha ISO (AAAA-MM) para el atributo datetime. */
   isoDate: string;
+}
+
+export interface Practice {
+  /** Identificador corto, usado en los ids de las pestañas. */
+  id: string;
+  label: string;
+  icon: IconName;
+  title: string;
+  /** Por qué se hace así, en una o dos frases. */
+  why: string;
+  /** Proyectos donde se aplicó. */
+  appliedIn: string[];
+  principles: string[];
+  filename: string;
+  /** Lenguaje para el resaltado de sintaxis. */
+  lang: 'ts' | 'java' | 'python' | 'sql' | 'yaml';
+  code: string;
 }

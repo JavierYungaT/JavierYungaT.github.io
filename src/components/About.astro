@@ -1,7 +1,6 @@
 ---
 import Button from './Button.astro';
 import CodeWindow from './CodeWindow.astro';
-import Icon from './Icon.astro';
 import Section from './Section.astro';
 import { about } from '@/data/profile';
 import { sections } from '@/data/site';
@@ -25,17 +24,6 @@ const codeSample = [
   <div class="about">
     <div class="about__text" data-reveal>
       {about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-
-      <ul class="about__chips" aria-label="Cómo trabajo">
-        {
-          about.principles.map((principle) => (
-            <li>
-              <Icon name={principle.icon} size={20} />
-              {principle.label}
-            </li>
-          ))
-        }
-      </ul>
 
       <Button href="#contacto" variant="outline" icon="arrowRight">Hablemos</Button>
     </div>
@@ -70,40 +58,6 @@ const codeSample = [
     justify-items: start;
     color: var(--text-muted);
     font-size: 1.0625rem;
-  }
-
-  .about__chips {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    width: 100%;
-    margin: 8px 0 12px;
-  }
-
-  .about__chips li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    transition:
-      border-color 0.3s ease,
-      transform 0.3s var(--ease-out);
-  }
-
-  .about__chips li:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-
-  .about__chips :global(.icon) {
-    color: var(--accent);
   }
 
   .about__visual {

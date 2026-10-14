@@ -35,6 +35,7 @@ export const projects: Project[] = [
   {
     title: 'Facturación electrónica integrada con el SRI',
     icon: 'receipt',
+    caseStudy: 'facturacion-sri',
     description:
       'Conexión con el SRI para emitir facturas electrónicas y notas de crédito y débito desde el sistema empresarial. Consultas 40% más rápidas con indexación y paginación avanzada, y procesamiento de grandes volúmenes de datos fiscales con Hibernate y procedimientos almacenados.',
     tags: ['Spring Boot', 'Hibernate', 'API SRI', 'SQL Server', 'Angular'],
