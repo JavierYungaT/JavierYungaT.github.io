@@ -1,0 +1,65 @@
+---
+import Button from './Button.astro';
+import { contact, socialLinks } from '@/data/site';
+---
+
+<section id="contacto" class="contact" aria-labelledby="contacto-titulo">
+  <div class="container">
+    <div class="contact__panel card">
+      <h2 id="contacto-titulo" class="contact__title">{contact.title}</h2>
+      <p class="contact__text">{contact.text}</p>
+      <div class="contact__actions">
+        <Button href={`mailto:${contact.email}`}>Escríbeme</Button>
+        {
+          socialLinks.map((link) => (
+            <Button href={link.href} variant="secondary" external>
+              {link.label}
+            </Button>
+          ))
+        }
+      </div>
+      <p class="contact__email">{contact.email}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-block: var(--section-space);
+  }
+
+  .contact__panel {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px);
+    text-align: center;
+  }
+
+  .contact__title {
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    font-weight: 700;
+    max-width: 18ch;
+  }
+
+  .contact__text {
+    color: var(--text-muted);
+    font-size: 1.0625rem;
+    max-width: 48ch;
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .contact__email {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+</style>

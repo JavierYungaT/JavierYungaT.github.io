@@ -1,0 +1,46 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import Section from './Section.astro';
+import { projects, projectsNote } from '@/data/projects';
+---
+
+<Section id="proyectos" title="Proyectos">
+  <p slot="intro" class="projects__note">{projectsNote}</p>
+  <ul class="projects">
+    {
+      projects.map((project) => (
+        <li class:list={{ 'projects__item--wide': project.featured }}>
+          <ProjectCard project={project} />
+        </li>
+      ))
+    }
+  </ul>
+</Section>
+
+<style>
+  .projects__note {
+    color: var(--text-muted);
+  }
+
+  .projects {
+    list-style: none;
+    display: grid;
+    gap: 16px;
+  }
+
+  .projects > li {
+    display: grid;
+    min-width: 0;
+  }
+
+  @media (min-width: 760px) {
+    .projects {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .projects__item--wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

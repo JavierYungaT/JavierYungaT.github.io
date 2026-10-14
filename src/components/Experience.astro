@@ -1,0 +1,29 @@
+---
+import ExperienceEntry from './ExperienceEntry.astro';
+import Section from './Section.astro';
+import { experience } from '@/data/experience';
+---
+
+<Section id="experiencia" title="Experiencia" eyebrow={'$ git log --author="Javier Yunga"'}>
+  <ol class="git-log" aria-label="Historial laboral, del más reciente al más antiguo">
+    {experience.map((entry) => <ExperienceEntry entry={entry} />)}
+  </ol>
+</Section>
+
+<style>
+  .git-log {
+    position: relative;
+    list-style: none;
+  }
+
+  /* Línea vertical que une los nodos (centrada en el nodo de 16px). */
+  .git-log::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--border);
+  }
+</style>

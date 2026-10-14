@@ -1,0 +1,84 @@
+---
+import Section from './Section.astro';
+import { stack } from '@/data/stack';
+---
+
+<Section id="stack" title="Stack">
+  <div class="stack">
+    {
+      stack.map((group) => (
+        <section class="stack__group card" aria-label={group.title}>
+          <h3 class="stack__title">{group.title}</h3>
+          <ul class="stack__list">
+            {group.skills.map((skill) => (
+              <li class="stack__item">
+                <span>{skill.name}</span>
+                <span class:list={['stack__level', `stack__level--${skill.level}`]}>{skill.level}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .stack {
+    display: grid;
+    gap: 16px;
+  }
+
+  .stack__group {
+    padding: 22px;
+  }
+
+  .stack__title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    padding-bottom: 14px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack__list {
+    list-style: none;
+  }
+
+  .stack__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-block: 9px;
+    font-size: 0.9375rem;
+  }
+
+  .stack__item + .stack__item {
+    border-top: 1px dashed var(--border);
+  }
+
+  .stack__level {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .stack__level--avanzado {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  @media (min-width: 600px) {
+    .stack {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .stack {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

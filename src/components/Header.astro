@@ -1,0 +1,104 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { navigation, site } from '@/data/site';
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="#inicio" aria-label={`${site.name}, ir al inicio`}>
+      {site.logo}
+    </a>
+    <nav class="header__nav" aria-label="Principal">
+      <ul class="header__links">
+        {
+          navigation.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Móvil: logo y tema arriba, enlaces en una segunda fila. */
+  .header__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'logo toggle'
+      'nav nav';
+    align-items: center;
+    row-gap: 6px;
+    padding-block: 10px 6px;
+  }
+
+  .header__logo {
+    grid-area: logo;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .header__logo:hover {
+    color: var(--accent);
+  }
+
+  .header__nav {
+    grid-area: nav;
+  }
+
+  .header__links {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .header__links a {
+    display: inline-block;
+    padding: 8px 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .header__links a:hover {
+    color: var(--accent);
+  }
+
+  @media (min-width: 720px) {
+    .header__inner {
+      grid-template-columns: 1fr auto auto;
+      grid-template-areas: 'logo nav toggle';
+      column-gap: 24px;
+      min-height: var(--header-h);
+      padding-block: 0;
+    }
+
+    .header__links {
+      gap: 8px;
+    }
+
+    .header__links a {
+      padding: 8px 10px;
+      font-size: 0.9375rem;
+    }
+  }
+</style>

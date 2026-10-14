@@ -1,0 +1,131 @@
+---
+import TagList from './TagList.astro';
+import type { Project } from '@/types/content';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { demo, repo } = project.links ?? {};
+const hasLinks = Boolean(demo || repo);
+---
+
+<article class:list={['project card', { 'project--featured': project.featured }]}>
+  <div class="project__content">
+    {project.featured && <p class="project__label">Proyecto destacado</p>}
+    {project.status && <p class="project__status">{project.status}</p>}
+    <h3 class="project__title">{project.title}</h3>
+    <p class="project__description">{project.description}</p>
+    <TagList tags={project.tags} label={`Tecnologías de ${project.title}`} />
+    {
+      hasLinks && (
+        <p class="project__links">
+          {demo && (
+            <a href={demo} target="_blank" rel="noopener noreferrer">
+              Ver demo<span aria-hidden="true"> ↗</span>
+            </a>
+          )}
+          {repo && (
+            <a href={repo} target="_blank" rel="noopener noreferrer">
+              Repositorio<span aria-hidden="true"> ↗</span>
+            </a>
+          )}
+        </p>
+      )
+    }
+  </div>
+
+  {
+    project.diagram && (
+      <figure class="project__diagram">
+        <pre tabindex="0" aria-label={`Diagrama de arquitectura de ${project.title}`}>{project.diagram}</pre>
+        <figcaption>Arquitectura simplificada</figcaption>
+      </figure>
+    )
+  }
+</article>
+
+<style>
+  .project {
+    display: grid;
+    gap: 24px;
+    padding: clamp(20px, 3vw, 28px);
+    min-width: 0;
+  }
+
+  .project__content {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .project__label,
+  .project__status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .project__status {
+    justify-self: start;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+  }
+
+  .project__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .project--featured .project__title {
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+  }
+
+  .project__description {
+    color: var(--text-muted);
+  }
+
+  .project__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .project__diagram {
+    margin: 0;
+    min-width: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .project__diagram pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .project__diagram figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 1040px) {
+    .project--featured {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+      gap: 40px;
+    }
+  }
+</style>
