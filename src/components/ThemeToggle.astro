@@ -1,8 +1,18 @@
 ---
 import Icon from './Icon.astro';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n(Astro.currentLocale);
 ---
 
-<button class="theme-toggle" type="button" aria-label="Cambiar tema de color" title="Cambiar tema">
+<button
+  class="theme-toggle"
+  type="button"
+  aria-label={t.themeToggle}
+  title={t.themeToggle}
+  data-to-dark={t.themeToDark}
+  data-to-light={t.themeToLight}
+>
   <Icon name="moon" size={18} class="theme-toggle__moon" />
   <Icon name="sun" size={18} class="theme-toggle__sun" />
 </button>
@@ -24,7 +34,7 @@ import Icon from './Icon.astro';
     const isDark = currentTheme() === 'dark';
     buttons.forEach((button) => {
       button.setAttribute('aria-pressed', String(isDark));
-      button.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+      button.setAttribute('aria-label', (isDark ? button.dataset.toLight : button.dataset.toDark) ?? '');
     });
   }
 

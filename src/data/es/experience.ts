@@ -13,7 +13,7 @@ export const experience: Experience[] = [
       'APIs REST para gestión documental, reservas y sincronización de datos en tiempo real.',
       'Docker y CI/CD con GitHub Actions sobre AWS.',
     ],
-    tags: ['Python', 'Django REST', 'TypeScript', 'React', 'PostgreSQL', 'AWS', 'Docker'],
+    tags: ['Python', 'Django REST', '.NET', 'TypeScript', 'React', 'PostgreSQL', 'AWS', 'Docker'],
   },
   {
     role: 'Desarrollador Full Stack',
@@ -25,7 +25,7 @@ export const experience: Experience[] = [
       'Validación de reservas 30% más rápida (lógica de disponibilidad y bloqueos concurrentes).',
       'Notificaciones push, PDFs personalizados y dashboards en tiempo real.',
     ],
-    tags: ['Node.js', 'TypeScript', 'Flutter', 'Angular', 'MongoDB', 'PostgreSQL', 'AWS'],
+    tags: ['Node.js', '.NET', 'TypeScript', 'Flutter', 'Angular', 'MongoDB', 'PostgreSQL', 'AWS'],
   },
   {
     role: 'Asistente de Mesa de Servicio',
@@ -47,7 +47,7 @@ export const experience: Experience[] = [
       'Integración con el SRI para facturación electrónica y notas de crédito/débito; consultas 40% más rápidas con indexación y paginación.',
       'Módulos financieros, stock e inventario; conciliaciones bancarias con JasperReports.',
     ],
-    tags: ['Spring Boot', 'Hibernate', 'Laravel', 'Angular', 'SQL Server'],
+    tags: ['Spring Boot', '.NET', 'Hibernate', 'Laravel', 'Angular', 'SQL Server'],
   },
   {
     role: 'Desarrollador Web',

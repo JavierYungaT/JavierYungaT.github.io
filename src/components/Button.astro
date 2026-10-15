@@ -13,7 +13,8 @@ interface Props {
   icon?: IconName;
   /** Abre en otra pestaña con rel seguro. */
   external?: boolean;
-  download?: boolean;
+  /** true descarga con el nombre original; un texto define el nombre del archivo descargado. */
+  download?: boolean | string;
 }
 
 const { href, variant = 'primary', icon, external = false, download = false } = Astro.props;
@@ -24,7 +25,7 @@ const { href, variant = 'primary', icon, external = false, download = false } = 
   class:list={['button', `button--${variant}`]}
   target={external ? '_blank' : undefined}
   rel={external ? 'noopener noreferrer' : undefined}
-  download={download || undefined}
+  download={download === true ? '' : download || undefined}
 >
   <span><slot /></span>
   {icon && <Icon name={icon} size={18} class="button__icon" />}

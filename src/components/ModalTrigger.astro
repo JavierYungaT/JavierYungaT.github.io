@@ -1,0 +1,87 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '@/lib/icons';
+
+interface Props {
+  /** Id del <Modal> que abre. */
+  target: string;
+  icon?: IconName;
+  /** dark: sobre secciones oscuras. light: sobre secciones claras. */
+  tone?: 'dark' | 'light';
+  align?: 'center' | 'start';
+}
+
+const { target, icon = 'layers', tone = 'dark', align = 'center' } = Astro.props;
+---
+
+<div class:list={['modal-trigger', `modal-trigger--${align}`]}>
+  <button
+    class:list={['modal-trigger__button', `modal-trigger__button--${tone}`]}
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls={target}
+    data-modal-open={target}
+  >
+    <Icon name={icon} size={18} />
+    <slot />
+    <Icon name="arrowUpRight" size={16} />
+  </button>
+</div>
+
+<style>
+  .modal-trigger {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .modal-trigger--start {
+    justify-content: flex-start;
+    margin-top: 24px;
+  }
+
+  .modal-trigger__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .modal-trigger__button--dark {
+    border: 1px solid rgba(110, 231, 183, 0.45);
+    background: rgba(110, 231, 183, 0.06);
+    color: #ffffff;
+  }
+
+  .modal-trigger__button--dark:hover {
+    background: rgba(110, 231, 183, 0.14);
+    border-color: var(--brand-light);
+  }
+
+  .modal-trigger__button--dark :global(.icon) {
+    color: var(--brand-light);
+  }
+
+  .modal-trigger__button--light {
+    border: 1px solid var(--text);
+    background: transparent;
+    color: var(--text);
+  }
+
+  .modal-trigger__button--light:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+</style>

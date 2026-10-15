@@ -1,8 +1,10 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { contact, navigation, site, socialLinks } from '@/data/site';
+import { useI18n } from '@/i18n';
 
+const { c, t } = useI18n(Astro.currentLocale);
+const { contact, navigation, site, socialLinks } = c;
 const year = new Date().getFullYear();
 ---
 
@@ -13,8 +15,8 @@ const year = new Date().getFullYear();
       <p>{site.tagline}</p>
     </div>
 
-    <nav class="footer__col" aria-label="Secciones">
-      <p class="footer__heading">Navegación</p>
+    <nav class="footer__col" aria-label={t.sections}>
+      <p class="footer__heading">{t.navigation}</p>
       <ul>
         {
           navigation.map((link) => (
@@ -27,7 +29,7 @@ const year = new Date().getFullYear();
     </nav>
 
     <div class="footer__col">
-      <p class="footer__heading">Contacto</p>
+      <p class="footer__heading">{t.contact}</p>
       <ul>
         <li>
           <a href={`mailto:${contact.email}`}>
@@ -57,7 +59,7 @@ const year = new Date().getFullYear();
 
   <div class="container footer__bottom">
     <p>© <span data-current-year>{year}</span> {site.name}</p>
-    <a href="#contenido">Volver arriba ↑</a>
+    <a href="#contenido">{t.backToTop}</a>
   </div>
 </footer>
 

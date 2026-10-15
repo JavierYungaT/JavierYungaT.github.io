@@ -1,4 +1,6 @@
 ---
+import { useI18n } from '@/i18n';
+
 interface Props {
   tags: string[];
   label?: string;
@@ -6,7 +8,8 @@ interface Props {
   tone?: 'default' | 'dark';
 }
 
-const { tags, label = 'Tecnologías', tone = 'default' } = Astro.props;
+const { t } = useI18n(Astro.currentLocale);
+const { tags, label = t.technologies, tone = 'default' } = Astro.props;
 ---
 
 <ul class:list={['tags', `tags--${tone}`]} aria-label={label}>

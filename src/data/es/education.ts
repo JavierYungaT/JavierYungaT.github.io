@@ -7,6 +7,9 @@ export const degree: Degree = {
   note: 'Título registrado en SENESCYT',
 };
 
+/** Cuántas certificaciones se ven antes de "Ver todas". */
+export const certificationsPreviewCount: number = 4;
+
 /** Ordenadas de la más reciente a la más antigua. */
 export const certifications: Certification[] = [
   {

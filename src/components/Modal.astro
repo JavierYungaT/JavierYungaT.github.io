@@ -1,0 +1,136 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Id del <dialog>; el botón que lo abre usa data-modal-open="<id>" (ver ModalTrigger). */
+  id: string;
+  title: string;
+  intro?: string;
+  closeLabel: string;
+}
+
+const { id, title, intro, closeLabel } = Astro.props;
+---
+
+<dialog class="modal" id={id} aria-labelledby={`${id}-titulo`}>
+  <div class="modal__panel">
+    <header class="modal__header">
+      <div>
+        <h3 id={`${id}-titulo`} class="modal__title">{title}</h3>
+        {intro && <p class="modal__intro">{intro}</p>}
+      </div>
+      <button class="modal__close" type="button" aria-label={closeLabel} data-modal-close>
+        <Icon name="close" size={20} />
+      </button>
+    </header>
+    <div class="modal__body">
+      <slot />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Ventanas con <dialog> nativo: Esc cierra y el foco queda dentro mientras están abiertas.
+  // Al cerrar, el foco vuelve al botón que la abrió.
+  const openers = new Map<HTMLDialogElement, HTMLElement>();
+
+  document.querySelectorAll<HTMLButtonElement>('[data-modal-open]').forEach((trigger) => {
+    const dialog = document.getElementById(trigger.dataset.modalOpen ?? '');
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    trigger.addEventListener('click', () => {
+      openers.set(dialog, trigger);
+      dialog.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('dialog.modal').forEach((dialog) => {
+    dialog.querySelector('[data-modal-close]')?.addEventListener('click', () => dialog.close());
+    // Clic en el fondo oscuro (fuera del panel) también cierra.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => openers.get(dialog)?.focus());
+  });
+</script>
+
+<style>
+  .modal {
+    width: min(960px, calc(100vw - 32px));
+    max-height: min(86vh, 900px);
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    background: var(--ink-900);
+    color: #ffffff;
+    box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+  }
+
+  .modal::backdrop {
+    background: rgba(3, 10, 8, 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal[open] {
+    animation: modal-in 0.35s var(--ease-out);
+  }
+
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
+  }
+
+  .modal__panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    max-height: inherit;
+  }
+
+  .modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 16px;
+    padding: 24px clamp(20px, 4vw, 32px) 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .modal__title {
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+  }
+
+  .modal__intro {
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.9375rem;
+  }
+
+  .modal__close {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .modal__close:hover {
+    border-color: var(--brand-light);
+    color: var(--brand-light);
+  }
+
+  .modal__body {
+    padding: 24px clamp(20px, 4vw, 32px) 32px;
+    overflow-y: auto;
+  }
+</style>

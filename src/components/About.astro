@@ -1,23 +1,12 @@
 ---
 import Button from './Button.astro';
 import CodeWindow from './CodeWindow.astro';
+import Icon from './Icon.astro';
 import Section from './Section.astro';
-import { about } from '@/data/profile';
-import { sections } from '@/data/site';
+import { useI18n } from '@/i18n';
 
-// Código decorativo que se escribe solo (k: palabra clave, s: texto, f: función, n: valor, c: comentario).
-const codeSample = [
-  `<span class="k">import</span> { Ingeniero } <span class="k">from</span> <span class="s">'javier-yunga'</span>;`,
-  ``,
-  `<span class="k">const</span> javier = <span class="k">new</span> <span class="f">Ingeniero</span>({`,
-  `  experiencia: <span class="s">'4+ años'</span>,`,
-  `  enfoque: [<span class="s">'web'</span>, <span class="s">'móvil'</span>, <span class="s">'backend'</span>],`,
-  `  stack: [<span class="s">'Spring Boot'</span>, <span class="s">'NestJS'</span>, <span class="s">'Django'</span>],`,
-  `  disponible: <span class="n">true</span>,`,
-  `});`,
-  ``,
-  `javier.<span class="f">construir</span>(); <span class="c">// software que se usa a diario</span>`,
-].join('\n');
+const { c, t } = useI18n(Astro.currentLocale);
+const { about, sections } = c;
 ---
 
 <Section id="sobre-mi" heading={sections.about} align="left">
@@ -25,12 +14,28 @@ const codeSample = [
     <div class="about__text" data-reveal>
       {about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
 
-      <Button href="#contacto" variant="outline" icon="arrowRight">Hablemos</Button>
+      <ul class="soft-skills" aria-label={t.softSkills}>
+        {
+          about.softSkills.map((skill) => (
+            <li class="soft-skill">
+              <span class="soft-skill__icon">
+                <Icon name={skill.icon} size={20} />
+              </span>
+              <span class="soft-skill__text">
+                <strong>{skill.title}</strong>
+                <span>{skill.proof}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <Button href="#contacto" variant="outline" icon="arrowRight">{t.letsTalk}</Button>
     </div>
 
     <div class="about__visual" aria-hidden="true" data-reveal style="--d: 150ms">
       <div class="about__float">
-        <CodeWindow filename="javier.ts" typewriter><Fragment set:html={codeSample} /></CodeWindow>
+        <CodeWindow filename="javier.ts" typewriter><Fragment set:html={about.code} /></CodeWindow>
       </div>
       <ul class="about__highlights">
         {
@@ -58,6 +63,62 @@ const codeSample = [
     justify-items: start;
     color: var(--text-muted);
     font-size: 1.0625rem;
+  }
+
+  .soft-skills {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: 12px;
+    width: 100%;
+    margin: 8px 0 12px;
+  }
+
+  .soft-skill {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition:
+      border-color 0.3s ease,
+      transform 0.3s var(--ease-out);
+  }
+
+  .soft-skill:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .soft-skill__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: var(--surface-muted);
+    color: var(--accent);
+  }
+
+  .soft-skill__text {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .soft-skill__text strong {
+    color: var(--text);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .soft-skill__text span {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--text-muted);
   }
 
   .about__visual {

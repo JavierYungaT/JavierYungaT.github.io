@@ -1,8 +1,14 @@
 ---
 import Icon from './Icon.astro';
+import Modal from './Modal.astro';
+import ModalTrigger from './ModalTrigger.astro';
 import Section from './Section.astro';
-import { certifications, degree } from '@/data/education';
-import { sections } from '@/data/site';
+import { useI18n } from '@/i18n';
+
+const { c, t } = useI18n(Astro.currentLocale);
+const { certifications, certificationsPreviewCount, degree, sections } = c;
+const visibleCertifications = certifications.slice(0, certificationsPreviewCount);
+const hasMore = certifications.length > certificationsPreviewCount;
 ---
 
 <Section id="formacion" heading={sections.education} align="left">
@@ -23,10 +29,10 @@ import { sections } from '@/data/site';
     </article>
 
     <div class="certs" data-reveal style="--d: 150ms">
-      <h3 class="certs__title">Certificaciones</h3>
+      <h3 class="certs__title">{t.certifications}</h3>
       <ol class="certs__list">
         {
-          certifications.map((cert, index) => (
+          visibleCertifications.map((cert, index) => (
             <li class="certs__item">
               <span class="certs__index" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
@@ -40,8 +46,38 @@ import { sections } from '@/data/site';
           ))
         }
       </ol>
+      {
+        hasMore && (
+          <ModalTrigger target="todas-certificaciones" icon="badge" tone="light" align="start">
+            {t.seeAllCertifications} ({certifications.length})
+          </ModalTrigger>
+        )
+      }
     </div>
   </div>
+
+  {
+    hasMore && (
+      <Modal id="todas-certificaciones" title={t.certifications} closeLabel={t.close}>
+        <ol class="certs__list certs__list--dark">
+          {
+            certifications.map((cert, index) => (
+              <li class="certs__item">
+                <span class="certs__index" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span class="certs__body">
+                  <span class="certs__name">{cert.name}</span>
+                  <span class="certs__issuer">{cert.issuer}</span>
+                </span>
+                <time datetime={cert.isoDate}>{cert.date}</time>
+              </li>
+            ))
+          }
+        </ol>
+      </Modal>
+    )
+  }
 </Section>
 
 <style>
@@ -154,6 +190,23 @@ import { sections } from '@/data/site';
     font-size: 0.8125rem;
     color: var(--text-muted);
     white-space: nowrap;
+  }
+
+  .certs__list--dark .certs__item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .certs__list--dark .certs__index {
+    color: var(--brand-light);
+  }
+
+  .certs__list--dark .certs__name {
+    color: #ffffff;
+  }
+
+  .certs__list--dark .certs__issuer,
+  .certs__list--dark time {
+    color: rgba(255, 255, 255, 0.65);
   }
 
   @media (min-width: 960px) {

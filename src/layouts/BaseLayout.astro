@@ -1,24 +1,33 @@
 ---
 import '@/styles/global.css';
-import { site } from '@/data/site';
+import { defaultLang, languages, localeInfo, useI18n, type Lang } from '@/i18n';
 
 interface Props {
   title?: string;
   description?: string;
   /** Ruta (dentro de public/) de la imagen de vista previa al compartir, 1200×630. */
   image?: string;
+  /** URL equivalente de esta página en cada idioma (para hreflang). */
+  alternates?: Partial<Record<Lang, string>>;
 }
 
+const { c, t, lang, info } = useI18n(Astro.currentLocale);
+const { site } = c;
 const { title = site.title, description = site.description, image = site.ogImage } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const imageUrl = new URL(image, Astro.site).href;
+const langCodes = Object.keys(languages) as Lang[];
+const alternates = langCodes.map((code) => ({
+  code,
+  href: new URL(Astro.props.alternates?.[code] ?? localeInfo[code].home, Astro.site).href,
+}));
 
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700&display=swap';
 ---
 
 <!doctype html>
-<html lang={site.lang}>
+<html lang={info.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,11 +35,18 @@ const fontsHref =
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.code} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates.find((alt) => alt.code === defaultLang)?.href} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#06120e" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content={site.locale} />
+    <meta property="og:locale" content={info.ogLocale} />
+    {
+      langCodes
+        .filter((code) => code !== lang)
+        .map((code) => <meta property="og:locale:alternate" content={localeInfo[code].ogLocale} />)
+    }
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -62,7 +78,7 @@ const fontsHref =
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <a class="skip-link" href="#contenido">{t.skipToContent}</a>
     <slot />
 
     <script>

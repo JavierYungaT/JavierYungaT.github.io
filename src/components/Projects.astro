@@ -2,9 +2,10 @@
 import Icon from './Icon.astro';
 import ProjectCard from './ProjectCard.astro';
 import Section from './Section.astro';
-import { projects, projectsNote, projectsPreviewCount } from '@/data/projects';
-import { sections } from '@/data/site';
+import { useI18n } from '@/i18n';
 
+const { c, t } = useI18n(Astro.currentLocale);
+const { projects, projectsNote, projectsPreviewCount, sections } = c;
 const hiddenCount = Math.max(projects.length - projectsPreviewCount, 0);
 ---
 
@@ -35,10 +36,10 @@ const hiddenCount = Math.max(projects.length - projectsPreviewCount, 0);
           type="button"
           aria-expanded="false"
           aria-controls="lista-proyectos"
-          data-more={`Ver más proyectos (${hiddenCount})`}
-          data-less="Ver menos proyectos"
+          data-more={`${t.showMoreProjects} (${hiddenCount})`}
+          data-less={t.showFewerProjects}
         >
-          <span>Ver más proyectos ({hiddenCount})</span>
+          <span>{t.showMoreProjects} ({hiddenCount})</span>
           <Icon name="arrowRight" size={18} class="projects__toggle-icon" />
         </button>
       </div>

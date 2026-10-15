@@ -1,8 +1,13 @@
 ---
 import Icon from './Icon.astro';
+import Modal from './Modal.astro';
+import ModalTrigger from './ModalTrigger.astro';
 import Section from './Section.astro';
-import { sections } from '@/data/site';
-import { stack } from '@/data/stack';
+import { useI18n } from '@/i18n';
+
+const { c, t } = useI18n(Astro.currentLocale);
+const { sections, stack, stackExtras } = c;
+const levelOrder = ['advanced', 'intermediate', 'basic'] as const;
 ---
 
 <Section id="stack" heading={sections.stack} tone="dark" fx="code">
@@ -26,7 +31,7 @@ import { stack } from '@/data/stack';
                     <i />
                     <i />
                   </span>
-                  <span class="sr-only">{skill.level}</span>
+                  <span class="sr-only">{t.levels[skill.level]}</span>
                 </span>
               </li>
             ))}
@@ -36,9 +41,53 @@ import { stack } from '@/data/stack';
     }
   </div>
   <p class="stack__legend" aria-hidden="true">
-    <span class="stack__level stack__level--avanzado"><span class="stack__meter"><i></i><i></i><i></i></span> avanzado</span>
-    <span class="stack__level stack__level--intermedio"><span class="stack__meter"><i></i><i></i><i></i></span> intermedio</span>
+    <span class="stack__legend-title">{t.levelLegend}</span>
+    {
+      levelOrder.map((level) => (
+        <span class:list={['stack__level', `stack__level--${level}`]}>
+          <span class="stack__meter">
+            <i />
+            <i />
+            <i />
+          </span>
+          {t.levels[level]}
+        </span>
+      ))
+    }
   </p>
+
+  <ModalTrigger target="otros-conocimientos" icon="sparkles">{t.otherSkillsButton}</ModalTrigger>
+
+  <Modal id="otros-conocimientos" title={t.otherSkillsTitle} intro={t.otherSkillsIntro} closeLabel={t.close}>
+    <div class="extras">
+    {
+      stackExtras.map((group, index) => (
+        <section class:list={['extras__group', { 'extras__group--wide': index === 0 }]} aria-labelledby={`extra-${group.icon}`}>
+          <h3 id={`extra-${group.icon}`} class="extras__title">
+            <Icon name={group.icon} size={20} />
+            {group.title}
+          </h3>
+          {group.items.some((item) => item.detail) ? (
+            <ul class="extras__details">
+              {group.items.map((item) => (
+                <li>
+                  <strong>{item.name}</strong>
+                  {item.detail && <span>{item.detail}</span>}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul class="extras__chips">
+              {group.items.map((item) => (
+                <li>{item.name}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+  </div>
+  </Modal>
 </Section>
 
 <style>
@@ -126,8 +175,9 @@ import { stack } from '@/data/stack';
     background: var(--border-strong);
   }
 
-  .stack__level--intermedio .stack__meter i:nth-child(-n + 2),
-  .stack__level--avanzado .stack__meter i {
+  .stack__level--basic .stack__meter i:first-child,
+  .stack__level--intermediate .stack__meter i:nth-child(-n + 2),
+  .stack__level--advanced .stack__meter i {
     background: var(--gradient);
   }
 
@@ -136,7 +186,13 @@ import { stack } from '@/data/stack';
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px 28px;
-    margin-top: 28px;
+    margin: 28px auto 0;
+    width: fit-content;
+    max-width: 100%;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(9, 26, 20, 0.92);
   }
 
   .stack__legend .stack__level {
@@ -144,13 +200,100 @@ import { stack } from '@/data/stack';
     color: rgba(255, 255, 255, 0.7);
   }
 
-  .stack__legend .stack__meter i:not(:nth-child(-n + 2)) {
+  .stack__legend-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .stack__legend .stack__meter i {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  .stack__legend .stack__level--avanzado .stack__meter i {
+  .stack__legend .stack__level--basic .stack__meter i:first-child,
+  .stack__legend .stack__level--intermediate .stack__meter i:nth-child(-n + 2),
+  .stack__legend .stack__level--advanced .stack__meter i {
     background: var(--gradient);
   }
+
+  /* Conocimientos complementarios */
+  .extras {
+    display: grid;
+    gap: 16px;
+  }
+
+  .extras__group {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    padding: 22px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Fondo casi opaco para que la lluvia de código no se mezcle con el texto. */
+    background: rgba(9, 26, 20, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .extras__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.0625rem;
+    color: #ffffff;
+  }
+
+  .extras__title :global(.icon) {
+    color: var(--brand-light);
+  }
+
+  .extras__chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .extras__chips li {
+    padding: 6px 11px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .extras__details {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .extras__details li {
+    display: grid;
+    gap: 2px;
+  }
+
+  .extras__details strong {
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .extras__details span {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  @media (min-width: 760px) {
+    .extras {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .extras__group--wide {
+      grid-column: 1 / -1;
+    }
+  }
+
 
   @media (min-width: 600px) {
     .stack {

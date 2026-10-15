@@ -19,6 +19,13 @@ export interface SectionHeading {
   title: string;
 }
 
+export interface SoftSkill {
+  icon: IconName;
+  title: string;
+  /** Prueba concreta que respalda la habilidad. */
+  proof: string;
+}
+
 export interface Stat {
   icon: IconName;
   /** Número que se anima al aparecer. */
@@ -65,7 +72,8 @@ export interface Project {
   links?: ProjectLinks;
 }
 
-export type SkillLevel = 'avanzado' | 'intermedio';
+/** La etiqueta visible de cada nivel se traduce en src/i18n/ui.ts. */
+export type SkillLevel = 'advanced' | 'intermediate' | 'basic';
 
 export interface Skill {
   name: string;
@@ -76,6 +84,13 @@ export interface SkillGroup {
   title: string;
   icon: IconName;
   skills: Skill[];
+}
+
+/** Grupo de conocimientos complementarios, sin nivel. */
+export interface ExtraGroup {
+  title: string;
+  icon: IconName;
+  items: { name: string; detail?: string }[];
 }
 
 export interface Degree {
@@ -109,4 +124,23 @@ export interface Practice {
   /** Lenguaje para el resaltado de sintaxis. */
   lang: 'ts' | 'java' | 'python' | 'sql' | 'yaml';
   code: string;
+}
+
+export interface CatalogItem {
+  name: string;
+  detail: string;
+  /** Proyectos donde se aplicó (nombres cortos). */
+  usedIn: string[];
+}
+
+/** Ventana de "Arquitecturas y patrones" de la sección de prácticas. */
+export interface PracticesCatalog {
+  button: string;
+  title: string;
+  intro: string;
+  architecturesLabel: string;
+  patternsLabel: string;
+  close: string;
+  architectures: CatalogItem[];
+  patterns: CatalogItem[];
 }

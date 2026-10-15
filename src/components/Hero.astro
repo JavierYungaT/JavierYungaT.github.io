@@ -4,9 +4,10 @@ import { join } from 'node:path';
 import BackgroundFx from './BackgroundFx.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
-import { hero, stats } from '@/data/profile';
-import { site } from '@/data/site';
-import { stack } from '@/data/stack';
+import { useI18n } from '@/i18n';
+
+const { c, t } = useI18n(Astro.currentLocale);
+const { hero, stats, site, stack } = c;
 
 // Se resuelve en el build: si la foto no existe en public/, se muestra el monograma.
 const hasPhoto = existsSync(join(process.cwd(), 'public', hero.photo));
@@ -33,8 +34,8 @@ const stackNames = stack.flatMap((group) => group.skills.map((skill) => skill.na
         </h1>
         <p class="hero__subtitle">{hero.subtitle}</p>
         <div class="hero__actions">
-          <Button href="#proyectos" icon="arrowRight">Ver proyectos</Button>
-          <Button href={hero.cv} variant="ghost" icon="download" download>Descargar CV</Button>
+          <Button href="#proyectos" icon="arrowRight">{t.viewProjects}</Button>
+          <Button href={hero.cv} variant="ghost" icon="download" download={hero.cvFileName}>{t.downloadCv}</Button>
         </div>
       </div>
 
@@ -42,7 +43,7 @@ const stackNames = stack.flatMap((group) => group.skills.map((skill) => skill.na
         <div class="bento__photo">
           {
             hasPhoto ? (
-              <img src={hero.photo} alt={`Foto de ${site.name}`} width="500" height="500" loading="eager" />
+              <img src={hero.photo} alt={`${t.photoOf} ${site.name}`} width="500" height="500" loading="eager" />
             ) : (
               <span class="bento__monogram" aria-hidden="true">
                 {hero.monogram}
@@ -75,7 +76,7 @@ const stackNames = stack.flatMap((group) => group.skills.map((skill) => skill.na
       }
 
       <div class="bento__card bento__stack" data-reveal style="--d: 440ms">
-        <p class="bento__label">Stack</p>
+        <p class="bento__label">{t.stack}</p>
         <ul class="sr-only">
           {stackNames.map((name) => <li>{name}</li>)}
         </ul>

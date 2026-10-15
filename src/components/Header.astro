@@ -2,14 +2,27 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
-import { navigation } from '@/data/site';
+import { languages, localeInfo, useI18n, type Lang } from '@/i18n';
+
+interface Props {
+  /** URL equivalente de esta página en cada idioma (para el selector ES/EN). */
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const { c, t, lang } = useI18n(Astro.currentLocale);
+const { navigation } = c;
+const alternates: Record<Lang, string> = {
+  es: Astro.props.alternates?.es ?? localeInfo.es.home,
+  en: Astro.props.alternates?.en ?? localeInfo.en.home,
+};
+const langCodes = Object.keys(languages) as Lang[];
 ---
 
 <header class="header" id="site-header">
   <div class="container header__inner">
     <Logo />
 
-    <nav class="header__nav" aria-label="Principal">
+    <nav class="header__nav" aria-label={t.mainNav}>
       <ul class="header__links" id="menu-principal">
         {
           navigation.map((link) => (
@@ -24,13 +37,36 @@ import { navigation } from '@/data/site';
     </nav>
 
     <div class="header__actions">
+      <nav class="lang-switch" aria-label={t.language}>
+        {
+          langCodes.map((code) =>
+            code === lang ? (
+              <span class="lang-switch__item is-current" aria-current="true" lang={code}>
+                {code.toUpperCase()}
+              </span>
+            ) : (
+              <a
+                class="lang-switch__item"
+                href={alternates[code]}
+                hreflang={code}
+                lang={code}
+                aria-label={`${t.switchTo} ${languages[code]}`}
+              >
+                {code.toUpperCase()}
+              </a>
+            ),
+          )
+        }
+      </nav>
       <ThemeToggle />
       <button
         class="header__menu-button"
         type="button"
         aria-expanded="false"
         aria-controls="menu-principal"
-        aria-label="Abrir menú"
+        aria-label={t.openMenu}
+        data-open-label={t.openMenu}
+        data-close-label={t.closeMenu}
       >
         <Icon name="menu" size={20} class="header__menu-open" />
         <Icon name="close" size={20} class="header__menu-close" />
@@ -47,7 +83,7 @@ import { navigation } from '@/data/site';
   function setMenu(open: boolean): void {
     header?.classList.toggle('is-open', open);
     menuButton?.setAttribute('aria-expanded', String(open));
-    menuButton?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    menuButton?.setAttribute('aria-label', (open ? menuButton.dataset.closeLabel : menuButton.dataset.openLabel) ?? '');
     syncScrolled();
   }
 
@@ -121,6 +157,42 @@ import { navigation } from '@/data/site';
     list-style: none;
   }
 
+  /* Selector de idioma ES / EN */
+  .lang-switch {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .lang-switch__item {
+    display: inline-grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  a.lang-switch__item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .lang-switch__item.is-current {
+    background: var(--gradient);
+    color: #ffffff;
+  }
+
   .header__links a {
     position: relative;
     display: inline-block;
@@ -176,6 +248,43 @@ import { navigation } from '@/data/site';
 
   .header.is-open .header__menu-button :global(.header__menu-close) {
     display: block;
+  }
+
+  /* Pantallas angostas: controles más compactos para que entren logo, idioma, tema y menú. */
+  @media (max-width: 420px) {
+    .header__inner {
+      gap: 10px;
+    }
+
+    .header__actions {
+      gap: 6px;
+    }
+
+    .header :global(.logo__mark) {
+      width: 32px;
+      height: 32px;
+      font-size: 0.875rem;
+    }
+
+    .header :global(.logo) {
+      gap: 8px;
+    }
+
+    .header :global(.logo__text) {
+      font-size: 1.0625rem;
+    }
+
+    .lang-switch__item {
+      min-width: 28px;
+      height: 30px;
+      padding: 0 4px;
+    }
+
+    .header__menu-button,
+    .header :global(.theme-toggle) {
+      width: 38px;
+      height: 38px;
+    }
   }
 
   /* Móvil: menú desplegable bajo la barra. */

@@ -1,10 +1,11 @@
 ---
+path: facturacion-sri
 title: Facturación electrónica integrada con el SRI
 summary: Emisión de facturas y notas de crédito y débito electrónicas desde el sistema empresarial de una cadena de retail, con consultas 40% más rápidas sobre grandes volúmenes de datos fiscales.
 role: Desarrollador de Software
 period: mar 2023 — feb 2024
 context: Retail · Ecuador
-stack: [Spring Boot, Hibernate, API SRI, SQL Server, Angular, Laravel, JasperReports]
+stack: [Spring Boot, .NET, Hibernate, API SRI, SQL Server, Angular, Laravel, JasperReports]
 results:
   - value: 40%
     label: consultas más rápidas con índices y paginación avanzada

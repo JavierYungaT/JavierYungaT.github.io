@@ -2,18 +2,26 @@
 import { Code } from 'astro:components';
 import CodeWindow from './CodeWindow.astro';
 import Icon from './Icon.astro';
+import Modal from './Modal.astro';
+import ModalTrigger from './ModalTrigger.astro';
 import Section from './Section.astro';
 import codeTheme from '@/lib/esmeralda-code-theme.json';
-import { practices, practicesNote } from '@/data/practices';
-import { sections } from '@/data/site';
+import { useI18n } from '@/i18n';
 import type { ThemeRegistration } from 'shiki';
+
+const { c, t } = useI18n(Astro.currentLocale);
+const { practices, practicesNote, practicesCatalog: catalog, sections } = c;
+const catalogGroups = [
+  { id: 'arquitecturas', label: catalog.architecturesLabel, items: catalog.architectures },
+  { id: 'patrones', label: catalog.patternsLabel, items: catalog.patterns },
+];
 ---
 
 <Section id="practicas" heading={sections.practices} tone="dark">
   <p slot="intro">{practicesNote}</p>
 
   <div class="practices" data-reveal>
-    <div class="practices__tabs" role="tablist" aria-label="Prácticas">
+    <div class="practices__tabs" role="tablist" aria-label={t.practicesTabs}>
       {
         practices.map((practice, index) => (
           <button
@@ -45,12 +53,12 @@ import type { ThemeRegistration } from 'shiki';
             <h3 class="practices__title">{practice.title}</h3>
             <p class="practices__why">{practice.why}</p>
             <div class="practices__meta">
-              <p class="practices__label">Dónde lo apliqué</p>
+              <p class="practices__label">{t.appliedIn}</p>
               <ul class="practices__applied">
                 {practice.appliedIn.map((item) => <li>{item}</li>)}
               </ul>
             </div>
-            <ul class="practices__principles" aria-label="Principios">
+            <ul class="practices__principles" aria-label={t.principles}>
               {practice.principles.map((principle) => <li>{principle}</li>)}
             </ul>
           </div>
@@ -63,6 +71,35 @@ import type { ThemeRegistration } from 'shiki';
       ))
     }
   </div>
+
+  <ModalTrigger target="catalogo-arquitectura">{catalog.button}</ModalTrigger>
+
+  <Modal id="catalogo-arquitectura" title={catalog.title} intro={catalog.intro} closeLabel={catalog.close}>
+    <div class="catalog__grid">
+      {
+        catalogGroups.map((group) => (
+          <section class="catalog__group" aria-labelledby={`catalogo-${group.id}`}>
+            <h4 id={`catalogo-${group.id}`} class="catalog__group-title">
+              {group.label}
+            </h4>
+            <ul class="catalog__list">
+              {group.items.map((item) => (
+                <li class="catalog__item">
+                  <p class="catalog__name">{item.name}</p>
+                  <p class="catalog__detail">{item.detail}</p>
+                  <ul class="catalog__used" aria-label={t.appliedIn}>
+                    {item.usedIn.map((project) => (
+                      <li>{project}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </Modal>
 </Section>
 
 <script>
@@ -251,6 +288,70 @@ import type { ThemeRegistration } from 'shiki';
     .practices__panel {
       grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
       gap: 48px;
+    }
+  }
+
+  .catalog__grid {
+    display: grid;
+    gap: 28px;
+  }
+
+  .catalog__group-title {
+    margin-bottom: 14px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--brand-light);
+  }
+
+  .catalog__list {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .catalog__item {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .catalog__name {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .catalog__detail {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .catalog__used {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .catalog__used li {
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(110, 231, 183, 0.3);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--brand-light);
+  }
+
+  @media (min-width: 760px) {
+    .catalog__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
     }
   }
 </style>

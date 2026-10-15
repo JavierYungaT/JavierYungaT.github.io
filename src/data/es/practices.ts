@@ -1,6 +1,6 @@
-import type { Practice } from '@/types/content';
+import type { Practice, PracticesCatalog } from '@/types/content';
 
-export const practicesNote =
+export const practicesNote: string =
   'Fragmentos ilustrativos escritos para este portafolio: el código de los clientes es privado, pero las decisiones son las mismas.';
 
 /**
@@ -157,3 +157,77 @@ jobs:
       - run: ./scripts/build-push-deploy.sh \${{ github.sha }}`,
   },
 ];
+
+/** Ventana "Arquitecturas y patrones" que se abre desde la sección de prácticas. */
+export const practicesCatalog: PracticesCatalog = {
+  button: 'Ver arquitecturas y patrones',
+  title: 'Arquitecturas y patrones que aplico',
+  intro: 'Cada uno ligado al proyecto donde lo usé, para que podamos profundizar en una entrevista.',
+  architecturesLabel: 'Arquitecturas',
+  patternsLabel: 'Patrones de diseño',
+  close: 'Cerrar',
+  architectures: [
+    {
+      name: 'Arquitectura limpia / hexagonal',
+      detail: 'Dominio aislado; la base de datos y los servicios externos son adaptadores intercambiables.',
+      usedIn: ['Facturación SRI', 'CRM multi-firma', 'Microservicios bancarios'],
+    },
+    {
+      name: 'Microservicios',
+      detail: 'Servicios independientes, cada uno con su propia base de datos y despliegue.',
+      usedIn: ['Microservicios bancarios'],
+    },
+    {
+      name: 'Orientada a eventos',
+      detail: 'Comunicación asíncrona con RabbitMQ; Kafka y Event Sourcing en formación.',
+      usedIn: ['Microservicios bancarios'],
+    },
+    {
+      name: 'Capas / MVC',
+      detail: 'Controladores, servicios y repositorios con responsabilidades claras.',
+      usedIn: ['Módulos financieros', 'Cobranzas y contratos'],
+    },
+    {
+      name: 'API REST',
+      detail: 'Contratos claros entre frontend, apps móviles y backend.',
+      usedIn: ['Gestión documental', 'Reservas deportivas', 'CRM multi-firma'],
+    },
+    {
+      name: 'Tiempo real con WebSockets',
+      detail: 'Notificaciones con Django Channels, Redis y autenticación JWT.',
+      usedIn: ['CRM multi-firma'],
+    },
+  ],
+  patterns: [
+    {
+      name: 'Strategy',
+      detail: 'Un generador por tipo de comprobante electrónico.',
+      usedIn: ['Facturación SRI'],
+    },
+    {
+      name: 'Adapter',
+      detail: 'El web service SOAP del SRI queda detrás de una interfaz propia.',
+      usedIn: ['Facturación SRI'],
+    },
+    {
+      name: 'Repository',
+      detail: 'Acceso a datos desacoplado de la lógica de negocio.',
+      usedIn: ['Facturación SRI', 'CRM multi-firma'],
+    },
+    {
+      name: 'Inyección de dependencias',
+      detail: 'Spring y NestJS resuelven las dependencias; el código se prueba con facilidad.',
+      usedIn: ['Microservicios bancarios', 'Gestión de carreras por WhatsApp'],
+    },
+    {
+      name: 'Observer / Pub-Sub',
+      detail: 'Notificaciones y eventos sin acoplar a quien emite con quien recibe.',
+      usedIn: ['CRM multi-firma', 'Microservicios bancarios'],
+    },
+    {
+      name: 'DTO',
+      detail: 'Objetos de transferencia para no exponer el modelo de dominio en las APIs.',
+      usedIn: ['Gestión documental', 'Reservas deportivas'],
+    },
+  ],
+};

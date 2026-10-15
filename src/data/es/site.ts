@@ -10,8 +10,6 @@ export const site = {
   tagline: 'Ingeniero en Ciencias de la Computación. Sistemas web, móviles y backend que las empresas usan todos los días.',
   /** Vista previa al compartir el enlace (fuente en scripts/og-image.html). */
   ogImage: '/og.png',
-  locale: 'es_EC',
-  lang: 'es',
 };
 
 export const navigation: NavLink[] = [
@@ -23,7 +21,7 @@ export const navigation: NavLink[] = [
 
 /** Etiqueta pequeña y título de cada sección. */
 export const sections = {
-  about: { eyebrow: 'Sobre mí', title: 'Del backend al despliegue, entendiendo el negocio' },
+  about: { eyebrow: 'Sobre mí', title: 'Del requerimiento al despliegue' },
   practices: { eyebrow: 'Cómo construyo software', title: 'Código limpio, decisiones con criterio' },
   experience: { eyebrow: 'Experiencia', title: 'Mi carrera, commit a commit' },
   projects: { eyebrow: 'Proyectos', title: 'Lo que he construido' },

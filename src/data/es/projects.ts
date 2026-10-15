@@ -1,6 +1,6 @@
 import type { Project } from '@/types/content';
 
-export const projectsNote =
+export const projectsNote: string =
   'Algunos proyectos son privados por acuerdos con clientes; puedo mostrarlos en una entrevista.';
 
 // Cada línea mide lo mismo en una fuente monoespaciada: edítalo con cuidado.
@@ -18,7 +18,7 @@ const auditPlatformDiagram = [
 ].join('\n');
 
 /** Cuántos proyectos se ven antes de pulsar "Ver más proyectos" (incluye el destacado). */
-export const projectsPreviewCount = 5;
+export const projectsPreviewCount: number = 5;
 
 /** El primer proyecto con `featured: true` se muestra a ancho completo. */
 export const projects: Project[] = [
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     caseStudy: 'facturacion-sri',
     description:
       'Conexión con el SRI para emitir facturas electrónicas y notas de crédito y débito desde el sistema empresarial. Consultas 40% más rápidas con indexación y paginación avanzada, y procesamiento de grandes volúmenes de datos fiscales con Hibernate y procedimientos almacenados.',
-    tags: ['Spring Boot', 'Hibernate', 'API SRI', 'SQL Server', 'Angular'],
+    tags: ['Spring Boot', '.NET', 'Hibernate', 'API SRI', 'SQL Server', 'Angular'],
     links: { demo: '', repo: '' },
   },
   {
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     icon: 'folder',
     description:
       'Reportes dinámicos y archivos PDF personalizados dentro del sistema de gestión documental, con dashboards internos en tiempo real y APIs REST para documentos y sincronización de datos.',
-    tags: ['Python', 'TypeScript', 'React', 'PDFKit', 'Docker', 'GitHub Actions'],
+    tags: ['Python', '.NET', 'TypeScript', 'React', 'PDFKit', 'Docker', 'GitHub Actions'],
     links: { demo: '', repo: '' },
   },
   {
@@ -70,7 +70,7 @@ export const projects: Project[] = [
     icon: 'chart',
     description:
       'Módulos financieros, de stock e inventario, con conciliaciones bancarias y reportes contables en JasperReports y Oracle Forms & Reports.',
-    tags: ['Spring Boot', 'Laravel', 'Angular', 'JasperReports', 'Oracle Forms'],
+    tags: ['Spring Boot', '.NET', 'Laravel', 'Angular', 'JasperReports', 'Oracle Forms'],
     links: { demo: '', repo: '' },
   },
   {

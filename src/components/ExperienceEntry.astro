@@ -2,6 +2,7 @@
 import TagList from './TagList.astro';
 import { commitHash } from '@/lib/commit-hash';
 import type { Experience } from '@/types/content';
+import { useI18n } from '@/i18n';
 
 interface Props {
   entry: Experience;
@@ -10,7 +11,9 @@ interface Props {
 }
 
 const { entry, delay = 0 } = Astro.props;
-const hash = commitHash(`${entry.company}:${entry.role}`);
+const { t } = useI18n(Astro.currentLocale);
+// El hash depende solo de empresa y año de inicio, así es igual en todos los idiomas.
+const hash = commitHash(`${entry.company}:${entry.period.match(/\d{4}/)?.[0] ?? ''}`);
 ---
 
 <li class:list={['commit', { 'commit--current': entry.current }]} data-reveal style={`--d: ${delay}ms`}>
@@ -20,7 +23,7 @@ const hash = commitHash(`${entry.company}:${entry.role}`);
       <code class="commit__hash" aria-hidden="true">{hash}</code>
       {entry.ref && <span class="commit__ref">{entry.ref}</span>}
       <span class="commit__period">{entry.period}</span>
-      {entry.current && <span class="sr-only">(actual)</span>}
+      {entry.current && <span class="sr-only">({t.current})</span>}
     </p>
     <h3 class="commit__title">
       {entry.role}{' '}
@@ -29,7 +32,7 @@ const hash = commitHash(`${entry.company}:${entry.role}`);
     <ul class="commit__highlights">
       {entry.highlights.map((highlight) => <li>{highlight}</li>)}
     </ul>
-    <TagList tags={entry.tags} label={`Tecnologías en ${entry.company}`} />
+    <TagList tags={entry.tags} label={`${t.technologiesAt} ${entry.company}`} />
   </article>
 </li>
 

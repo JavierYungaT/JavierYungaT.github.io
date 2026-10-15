@@ -2,6 +2,8 @@
 import CodeWindow from './CodeWindow.astro';
 import Icon from './Icon.astro';
 import TagList from './TagList.astro';
+import { getEntry } from 'astro:content';
+import { casePath, useI18n } from '@/i18n';
 import type { Project } from '@/types/content';
 
 interface Props {
@@ -10,7 +12,11 @@ interface Props {
 
 const { project } = Astro.props;
 const { demo, repo } = project.links ?? {};
-const hasLinks = Boolean(demo || repo || project.caseStudy);
+const { lang, t } = useI18n(Astro.currentLocale);
+// El caso de estudio se busca en el idioma actual para usar su URL traducida.
+const caseEntry = project.caseStudy ? await getEntry('casos', `${lang}/${project.caseStudy}`) : undefined;
+const caseHref = caseEntry ? casePath(lang, caseEntry.data.path) : undefined;
+const hasLinks = Boolean(demo || repo || caseHref);
 ---
 
 <article class:list={['project card card--hover-bar', { 'project--featured': project.featured }]}>
@@ -19,28 +25,28 @@ const hasLinks = Boolean(demo || repo || project.caseStudy);
   <div class="project__content">
     <div class="project__top">
       <span class="project__icon"><Icon name={project.icon} size={26} /></span>
-      {project.featured && <span class="project__badge">Proyecto destacado</span>}
+      {project.featured && <span class="project__badge">{t.featuredProject}</span>}
       {project.status && <span class="project__badge project__badge--soft">{project.status}</span>}
     </div>
     <h3 class="project__title">{project.title}</h3>
     <p class="project__description">{project.description}</p>
-    <TagList tags={project.tags} label={`Tecnologías de ${project.title}`} />
+    <TagList tags={project.tags} label={`${t.technologiesOf} ${project.title}`} />
     {
       hasLinks && (
         <p class="project__links">
-          {project.caseStudy && (
-            <a href={`/proyectos/${project.caseStudy}`} class="project__case">
-              Ver caso de estudio <Icon name="arrowRight" size={16} />
+          {caseHref && (
+            <a href={caseHref} class="project__case">
+              {t.viewCaseStudy} <Icon name="arrowRight" size={16} />
             </a>
           )}
           {demo && (
             <a href={demo} target="_blank" rel="noopener noreferrer">
-              Ver demo <Icon name="arrowUpRight" size={16} />
+              {t.viewDemo} <Icon name="arrowUpRight" size={16} />
             </a>
           )}
           {repo && (
             <a href={repo} target="_blank" rel="noopener noreferrer">
-              Repositorio <Icon name="arrowUpRight" size={16} />
+              {t.repository} <Icon name="arrowUpRight" size={16} />
             </a>
           )}
         </p>
@@ -51,10 +57,10 @@ const hasLinks = Boolean(demo || repo || project.caseStudy);
   {
     project.diagram && (
       <figure class="project__diagram">
-        <div role="img" aria-label={`Diagrama de arquitectura de ${project.title}`} tabindex="0">
+        <div role="img" aria-label={`${t.architectureOf} ${project.title}`} tabindex="0">
           <CodeWindow filename="arquitectura.txt">{project.diagram}</CodeWindow>
         </div>
-        <figcaption>Arquitectura simplificada</figcaption>
+        <figcaption>{t.simplifiedArchitecture}</figcaption>
       </figure>
     )
   }

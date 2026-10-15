@@ -2,14 +2,17 @@
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import Section from './Section.astro';
-import { contact, sections, socialLinks } from '@/data/site';
+import { useI18n } from '@/i18n';
+
+const { c, t } = useI18n(Astro.currentLocale);
+const { contact, sections, socialLinks } = c;
 ---
 
 <Section id="contacto" heading={sections.contact} tone="soft" fx="pulses">
   <p slot="intro">{contact.text}</p>
   <div class="contact card" data-reveal>
     <div class="contact__actions">
-      <Button href={`mailto:${contact.email}`} icon="mail">Escríbeme</Button>
+      <Button href={`mailto:${contact.email}`} icon="mail">{t.writeMe}</Button>
       <Button href={contact.whatsapp.href} variant="outline" icon="whatsapp" external>WhatsApp</Button>
       {
         socialLinks.map((link) => (

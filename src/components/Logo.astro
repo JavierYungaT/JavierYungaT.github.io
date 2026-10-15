@@ -1,8 +1,11 @@
 ---
-import { site } from '@/data/site';
+import { useI18n } from '@/i18n';
+
+const { c, t, info } = useI18n(Astro.currentLocale);
+const { site } = c;
 ---
 
-<a class="logo" href="/#inicio" aria-label={`${site.name}, ir al inicio`}>
+<a class="logo" href={`${info.home}#inicio`} aria-label={`${site.name}, ${t.goHome}`}>
   <span class="logo__mark" aria-hidden="true">{site.logo.mark}</span>
   <span class="logo__text" aria-hidden="true">
     {site.logo.first}<span class="logo__accent">{site.logo.second}</span>

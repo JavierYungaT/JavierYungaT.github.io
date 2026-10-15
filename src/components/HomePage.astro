@@ -1,0 +1,32 @@
+---
+import About from './About.astro';
+import Contact from './Contact.astro';
+import Education from './Education.astro';
+import Experience from './Experience.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Practices from './Practices.astro';
+import Projects from './Projects.astro';
+import Stack from './Stack.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { localeInfo } from '@/i18n';
+
+/** Página principal; el idioma sale de la URL (/ o /en/). */
+const alternates = { es: localeInfo.es.home, en: localeInfo.en.home };
+---
+
+<BaseLayout alternates={alternates}>
+  <Header alternates={alternates} />
+  <main id="contenido">
+    <Hero />
+    <About />
+    <Practices />
+    <Experience />
+    <Projects />
+    <Stack />
+    <Education />
+    <Contact />
+  </main>
+  <Footer />
+</BaseLayout>
