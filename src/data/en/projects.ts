@@ -33,6 +33,14 @@ export const projects: Project[] = [
     links: { demo: '', repo: '' },
   },
   {
+    title: 'Quality control for Odoo 18',
+    icon: 'shield',
+    description:
+      'Custom Odoo 18 Community module: automatic inspections on receipts, deliveries and manufacturing orders that block validation, non-conformities with cost, supplier quality score, QWeb PDF and HTML reports, and an OWL dashboard. 21 tests on GitHub Actions and a Spanish translation.',
+    tags: ['Odoo 18', 'Python', 'OWL 2', 'QWeb', 'PostgreSQL', 'Docker'],
+    links: { demo: '', repo: 'https://github.com/JavierYungaT/odoo18-quality-control' },
+  },
+  {
     title: 'Electronic invoicing integrated with the SRI',
     icon: 'receipt',
     caseStudy: 'facturacion-sri',
